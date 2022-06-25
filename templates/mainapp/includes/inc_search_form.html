@@ -1,0 +1,7 @@
+<form class="d-flex" role="search" method="GET">
+    {% for field in filter.form %}
+    <span class="form-control me-2">{{ field }}</span>
+    {% endfor %}
+    <button class="btn btn-outline-secondary" type="submit">Найти</button>
+
+</form>

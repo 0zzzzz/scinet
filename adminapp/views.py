@@ -4,11 +4,12 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView
+from django.contrib.contenttypes.models import ContentType
 
-from adminapp.forms import SNPostAdminForm
+from adminapp.forms import SNPostAdminForm, SNUserAdminEditForm
 from authapp.forms import SNUserRegisterForm, SNUserEditForm
 from authapp.models import SNUser
-from blogapp.models import SNPosts, SNSections
+from blogapp.models import SNPosts, SNSections, Notifications
 from adminapp.forms import SNSectionForm
 
 
@@ -67,7 +68,7 @@ class SNUserListView(AccessMixin, ListView):
 class SNUserUpdateView(AccessMixin, UpdateView):
     model = SNUser
     template_name = 'adminapp/users_crud/user_form.html'
-    form_class = SNUserEditForm
+    form_class = SNUserAdminEditForm
     success_url = reverse_lazy('index')
 
     def get_context_data(self, **kwargs):
@@ -150,10 +151,22 @@ class SNPostsDetail(AccessMixin, DetailView):
         return context
 
 
+def notify_post(post, from_user):
+    """Функция для создания уведомления по одобренному посту"""
+    from_user = from_user
+    content_type = ContentType.objects.get_for_model(post)
+    post_id = post.id
+    to_user = post.user
+
+    notification = Notifications.create(content_type, post_id, to_user, from_user)
+    notification.save()
+
+
 def post_moderated(request, pk=None):
     moderate_post = SNPosts.objects.get(id=pk)
     if moderate_post:
         moderate_post.moderated()
+        notify_post(moderate_post, request.user)
     return render(request, 'adminapp/posts_crud/post_moderated.html')
 
 

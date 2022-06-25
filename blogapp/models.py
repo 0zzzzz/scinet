@@ -36,11 +36,11 @@ class LikeDislikeManager(models.Manager):
     def sum_rating(self):
         return self.get_queryset().aggregate(Sum('vote')).get('vote__sum') or 0
 
-    def articles(self):
-        return self.get_queryset().filter(content_type__model='article').order_by('-articles__pub_date')
+    def posts(self):
+        return self.get_queryset().filter(content_type__model='snposts').order_by('-id')
 
     def comments(self):
-        return self.get_queryset().filter(content_type__model='comment').order_by('-comments__pub_date')
+        return self.get_queryset().filter(content_type__model='sncomments').order_by('-id')
 
 
 class LikeDislike(models.Model):
@@ -53,8 +53,8 @@ class LikeDislike(models.Model):
         (LIKE, 'Нравится')
     )
 
-    vote = models.SmallIntegerField(verbose_name="Голос", choices=VOTES)
-    user = models.ForeignKey(SNUser, verbose_name="Пользователь", on_delete=models.CASCADE)
+    vote = models.SmallIntegerField(verbose_name='Голос', choices=VOTES)
+    user = models.ForeignKey(SNUser, verbose_name='Пользователь', on_delete=models.CASCADE)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -71,11 +71,11 @@ class SNPosts(models.Model):
     image = models.ImageField(upload_to='posts', blank=True, null=True, verbose_name='Превьюшка поста')
     text = models.TextField(verbose_name='Текст поста')
     short_desc = models.CharField(max_length=255, verbose_name='Краткое описание поста')
-    is_active = models.BooleanField(default=False, db_index=True)
+    is_active = models.BooleanField(default=True, db_index=True)
     is_moderated = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    votes = GenericRelation(LikeDislike, related_query_name='articles')
+    votes = GenericRelation(LikeDislike, related_query_name='snposts')
 
     def __str__(self):
         return f'{self.name}'
@@ -98,11 +98,13 @@ class Comments(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True, db_index=True)
-    votes = GenericRelation(LikeDislike, related_query_name='comments')
+    votes = GenericRelation(LikeDislike, related_query_name='sncomments')
 
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+
+    
 
 
 class SNSubscribe(models.Model):
@@ -114,34 +116,40 @@ class SNSubscribe(models.Model):
 class Notifications(models.Model):
     """Уведомления"""
 
-    LIKE_NOTIFICATION = 'L'
-    COMMENT_NOTIFICATION = 'C'
+    # LIKE_NOTIFICATION = 'L'
+    # COMMENT_NOTIFICATION = 'C'
+    #
+    # MODES = (
+    #     (LIKE_NOTIFICATION, 'Лайк'),
+    #     (COMMENT_NOTIFICATION, 'Комментарий')
+    # )
 
-    TARGET_POST = 'P'
-    TARGET_COMMENT = 'C'
-
-    MODES = (
-        (LIKE_NOTIFICATION, 'Лайк'),
-        (COMMENT_NOTIFICATION, 'Комментарий')
-    )
-
-    TARGETS = (
-        (TARGET_POST, 'Пост'),
-        (TARGET_COMMENT, 'Комментарий')
-    )
-
-    post = models.ForeignKey(SNPosts, on_delete=models.CASCADE, verbose_name='Пост')
+    # post = models.ForeignKey(SNPosts, on_delete=models.CASCADE, verbose_name='Пост')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_seen = models.BooleanField(default=False, db_index=True)
     is_active = models.BooleanField(default=True, db_index=True)
-    mode = models.CharField(max_length=1, verbose_name="Вид уведомления", choices=MODES, default=LIKE_NOTIFICATION)
-    notifier = models.ForeignKey(SNUser, on_delete=models.CASCADE, verbose_name='Уведомитель')
+    # mode = models.CharField(max_length=1, verbose_name="Вид уведомления", choices=MODES, default=LIKE_NOTIFICATION)
+    from_user = models.ForeignKey(SNUser, on_delete=models.CASCADE, verbose_name='Уведомитель',
+                                  related_name='%(class)s_notifier')
+    to_user = models.ForeignKey(SNUser, on_delete=models.CASCADE, verbose_name='Пользователь',
+                                related_name='%(class)s_getter')
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
 
     class Meta:
         verbose_name = 'Уведомление'
         verbose_name_plural = 'Уведомления'
 
     @classmethod
-    def create(cls, post, mode, notifier):
-        notification = cls(post=post, mode=mode, notifier=notifier)
+    def create(cls, content_type, object_id, to_user, from_user):
+        notification = cls(content_type=content_type, object_id=object_id, to_user=to_user, from_user=from_user)
         return notification
+
+
+class SNFavorites(models.Model):
+    """Избранное пользователя"""
+    user = models.ForeignKey(SNUser, on_delete=models.CASCADE, verbose_name='Пользователь')
+    post = models.ForeignKey(SNPosts, on_delete=models.CASCADE, verbose_name='Пост')

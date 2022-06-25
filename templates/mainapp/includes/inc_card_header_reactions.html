@@ -21,7 +21,7 @@
         <div class="total-vote ms-3">
             <a href="#" class="text-muted text-decoration-none"><img
                     src="{% static 'img/vote.svg' %}"
-                    alt="views" width="25px">1000</a>
+                    alt="views" width="25px">{{ post.votes.sum_rating }}</a>
         </div>
         <div class="total-bookmarks ms-3">
             <a href="#" class="text-muted text-decoration-none"><img

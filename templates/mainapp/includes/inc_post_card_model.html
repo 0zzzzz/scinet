@@ -1,6 +1,6 @@
 {% load media_tags %}
 
-{% for post in posts %}
+{% for post in filter.qs %}
 <div class="card mb-3">
     <div class="card-header d-flex justify-content-start">
         {% include 'mainapp/includes/inc_card_header_reactions.html' %}

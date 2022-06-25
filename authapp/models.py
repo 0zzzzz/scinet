@@ -11,6 +11,7 @@ class SNUser(AbstractUser):
     avatar = models.ImageField(upload_to='users_avatars', verbose_name='Аватар', **NULLABLE)
     patronymic = models.CharField(max_length=150, verbose_name='Отчество', **NULLABLE)
     age = models.PositiveSmallIntegerField(verbose_name='Возраст', **NULLABLE)
+    is_moderator = models.BooleanField(default=False, verbose_name='Модератор')
 
 
 class SNUserProfile(models.Model):

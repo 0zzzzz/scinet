@@ -1,0 +1,11 @@
+{% for notify in object_list %}
+    <div {% if not notify.is_seen %} class="notification_seen"{% endif %}>
+        <p>{{notify.created_at}}</p>
+        <p>Пользователь {{ notify.from_user.username }} {{ notify.name }} {{ notify.post.name }}
+            <br>
+            <a href="{% url 'blogapp:post_read' notify.post.id %}" class="auth_button">Перейти к посту</a>
+            <a href="{% url 'blogapp:notification_delete' notify.pk %}" class="auth_button">Удалить</a>
+        </p>
+        <hr>
+    </div>
+{% endfor %}

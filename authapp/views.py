@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.http import Http404
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView
 from django.views.generic import View
@@ -163,7 +163,7 @@ class SNSectionsDetailView(ListView):
 def add_subscribe(request, pk):
     """Добавляет подписку для конкретного пользователя"""
     user = SNUser.objects.get(username=request.user)
-    section = SNSections.objects.get(id=pk)
+    section = get_object_or_404(SNSections, id=pk)
     if not SNSubscribe.objects.filter(Q(user=user) & Q(section=section)):
         subscribe = SNSubscribe(user=user, section=section)
         subscribe.save()
@@ -173,7 +173,7 @@ def add_subscribe(request, pk):
 def del_subscribe(request, pk):
     """Удаляет подписку для конкретного пользователя"""
     user = SNUser.objects.get(username=request.user)
-    section = SNSections.objects.get(id=pk)
+    section = get_object_or_404(SNSections, id=pk)
     SNSubscribe.objects.filter(Q(user=user) & Q(section=section)).delete()
     return HttpResponseRedirect(reverse('authapp:section_subscribe'))
 

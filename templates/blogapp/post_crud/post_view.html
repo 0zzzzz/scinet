@@ -4,69 +4,88 @@
 {% load bootstrap3 %}
 
 {% block content %}
-<div class="container text">
-    <br>
-    <h1>{{ post.name }}</h1>
-    <br>
-    <p>{{ post.text }}</p>
-    <br>
-    <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">
-    {% block js %}
-
-    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-    <script src="{% static 'js/likes.js' %}"></script>
-    {% endblock %}
-    {% if user.id == post.user.id %}
-    <a href="{% url 'blogs:post_update' post.id %}"
-       class="btn btn-outline-secondary me-2 col-4">Редактировать</a>
-
-    <a href="{% url 'blogs:post_delete' post.id %}"
-       class="btn btn-outline-secondary me-2 col-4">
-        {% if post.is_active %}
-        Скрыть
-        {% else %}
-        Восстановить
+    <div class="container text">
+        <br>
+        <h1>{{ post.name }}</h1>
+        {% if user.is_authenticated %}
+            {% if is_favorite %}
+                <img id='favorite' data-id="{{ post.id }}" data-action="on" src="{% static 'img/star-on.svg' %}" width="25">
+            {% else %}
+                <img id='favorite' data-id="{{ post.id }}" data-action="off" src="{% static 'img/star-off.svg' %}" width="25">
+            {% endif %}
         {% endif %}
-    </a>
-    {% endif %}
-    {% if user.is_authenticated %}
-{#    <ul class="likes">#}
-{#        <li data-id="{{ post.id }}" data-type="post" data-action="like" title="Нравится">#}
-{#            {{ like_obj }}#}
-{#            <img src="{% static 'img/like.png' %}" style="width:30px; ">#}
-{#            <div data-count="like">{{ post.votes.likes.count }}</div>#}
-{#        </li>#}
-{#        <li data-id="{{ post.id }}" data-type="post" data-action="dislike" title="Не нравится"#}
-{#            style="margin-left: 20px;">#}
-{#            <img src="{% static 'img/dislike.png' %}" style="width:30px; ">#}
-{#            <div data-count="dislike">{{ post.votes.dislikes.count }}</div>#}
-{#        </li>#}
-{#    </ul>#}
-    <form class="form-horizontal" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form }}
         <br>
-        <input type="submit" value="Опубликовать" class="auth_button btn-block btn-primary col-lg-12">
-    </form>
-    {% endif %}
-    <div>
+        <p>{{ post.text }}</p>
         <br>
-        Комментарии:
-        <ul>
-            {% for comment in comments %}
-            <div>
-                <a href="{% url 'authapp:profile_user' comment.user.username %}" class="text-muted text-decoration-none">
-                    {{comment.user.username}}
-                </a> от {{comment.created_at}}
-            </div>
-            <p>{{comment.text}}
-                {% if user.id == comment.user.id %}
-                <a href="{% url 'blogs:comment_delete' post_pk=object.id pk=comment.id%}">удалить</a>
-                <a href="{% url 'blogs:comment_update' post_pk=object.id pk=comment.id%}">изменить</a>
+        <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">
+        {% block js %}
+            <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+            <script src="{% static 'js/likes.js' %}"></script>
+            <script src="{% static 'js/favorite.js' %}"></script>
+        {% endblock %}
+        {% if user.id == post.user.id or user.is_moderator or user.is_superuser %}
+            <a href="{% url 'blogs:post_update' post.id %}"
+               class="btn btn-outline-secondary me-2 col-4">Редактировать</a>
+
+            <a href="{% url 'blogs:post_delete' post.id %}"
+               class="btn btn-outline-secondary me-2 col-4">
+                {% if post.is_active %}
+                    Скрыть
+                {% else %}
+                    Восстановить
                 {% endif %}
-            </p>
-            {% endfor %}
-        </ul>
+            </a>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <ul class="likes">
+                <li data-id="{{ post.id }}" data-type="post" data-action="like" title="Нравится">
+                    <img src="{% static 'img/like.png' %}" style="width:30px; ">
+                    <div data-count="like">{{ post.votes.likes.count }}</div>
+                </li>
+                <li data-id="{{ post.id }}" data-type="post" data-action="dislike" title="Не нравится"
+                    style="margin-left: 20px;">
+                    {{ post.votes.dislike }}
+                    <img src="{% static 'img/dislike.png' %}" style="width:30px; ">
+                    <div data-count="dislike">{{ post.votes.dislikes.count }}</div>
+                </li>
+            </ul>
+            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <br>
+                <input type="submit" value="Опубликовать" class="auth_button btn-block btn-primary col-lg-12">
+            </form>
+        {% endif %}
+        <div>
+            <br>
+            Комментарии:
+            <ul>
+                {% for comment in comments %}
+                    <div>
+                        <a href="{% url 'authapp:profile_user' comment.user.username %}"
+                           class="text-muted text-decoration-none">
+                            {{ comment.user.username }}
+                        </a> от {{ comment.created_at }}
+                    </div>
+                    <p>{{ comment.text }}
+                        {% if user.id == comment.user.id or user.is_moderator or user.is_superuser %}
+                            <a href="{% url 'blogs:comment_delete' post_pk=object.id pk=comment.id %}">удалить</a>
+                            <a href="{% url 'blogs:comment_update' post_pk=object.id pk=comment.id %}">изменить</a>
+                        {% endif %}
+                    </p>
+                    <ul class="likes">
+                        <li data-id="{{ comment.id }}" data-type="comment" data-action="like" title="Нравится">
+                            <img src="{% static 'img/like.png' %}" style="width:30px; ">
+                            <div data-count="like">{{ comment.votes.likes.count }}</div>
+                        </li>
+                        <li data-id="{{ comment.id }}" data-type="comment" data-action="dislike" title="Не нравится"
+                            style="margin-left: 20px;">
+                            <img src="{% static 'img/dislike.png' %}" style="width:30px; ">
+                            <div data-count="dislike">{{ comment.votes.dislikes.count }}</div>
+                        </li>
+                    </ul>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-</div>
 {% endblock %}

@@ -17,14 +17,13 @@
                                 <a class="text-uppercase text-decoration-none text-muted me-3" href="#">авторы</a>
                                 <a class="text-uppercase text-decoration-none text-muted me-3" href="#">компании</a>
                             </div>
-                            <div class="search bg-light">
-                                <form class="d-flex" role="search">
-                                    <input class="form-control me-2" type="search" placeholder="Найти"
-                                           aria-label="Search">
+                                <form class="d-flex" role="search" method="GET">
+                                    {% for field in filter.form %}
+                                        {{ field }}
+                                    {% endfor %}
                                     <button class="btn btn-outline-secondary" type="submit">Найти</button>
                                 </form>
                                 <br>
-                            </div>
                         </div>
                     </div>
                     <div class="pt-3"></div>

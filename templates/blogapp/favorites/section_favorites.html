@@ -1,0 +1,29 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% load media_tags %}
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <div>
+        <table class="container table orders_list">
+            <thead>
+            <tr>
+                <th>Название поста</th>
+                <th>Удалить из избранного</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in user_favorites %}
+                <tr>
+                    <td>{{ item.post }}</td>
+                    <td><a href="{% url 'blogapp:favorite_change' item.post.id %}">
+                    <img src="{% static 'img/delete.png' %}" alt="cancel" width="25px">
+                    </a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

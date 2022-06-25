@@ -258,3 +258,33 @@ ul.likes {
     list-style-type: none;
     display: flex;
 }
+
+
+.notification_seen {
+    background-color: #d0f5f5;
+    animation: pulse 1s infinite;
+}
+
+.notification_seen:hover {
+	animation: none;
+}
+
+@-webkit-keyframes pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(78, 62, 140, 0.4);
+	}
+	70% {
+		box-shadow: 0 0 0 10px rgba(78, 62, 140, 0);
+	}
+	100% {
+		box-shadow: 0 0 0 0 rgba(78, 62, 140, 0);
+	}
+}
+
+
+
+.custom-search {
+    width: 300px;
+    border-radius: 10px;
+}
+
