@@ -1,12 +1,37 @@
+<div class="col-xl-4 col-md-4">
+    <div class="blog_right_side">
+        <div class="section_title mb-33">
+            <h3>Категории</h3>
+        </div>
+        <div class="border best-blogs">
+            <ul class="list-group list-group-flush">
+                {% for category in categories %}
+                <li class="list-group-item text-uppercase">
+                    <a href="{% url 'adminapp:sections_all_posts' category.pk %}"
+                       class="text-muted text-decoration-none">{{
+                        category.name }}</a></li>
+                {# <a href="{% url 'sections:posts' category.pk %}" class="text-muted text-decoration-none">{{
+                category.name
+                }}</a></li>#}
 
-<div class="border best-blogs">
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item text-uppercase fs-4 bg-light">категории</li>
-        {% for category in categories %}
-            <li class="list-group-item text-uppercase">
-                <a href="{% url 'adminapp:sections_all_posts' category.pk %}" class="text-muted text-decoration-none">{{ category.name }}</a></li>
-{#                <a href="{% url 'sections:posts' category.pk %}" class="text-muted text-decoration-none">{{ category.name }}</a></li>#}
-
-        {% endfor %}
-    </ul>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="add_here text-center">
+            <a href="#">
+                <img src="img/most_recent/googleAdd.jpg" alt="">
+            </a>
+        </div>
+        <div class="section_title mb-33">
+            <h3>Tags</h3>
+        </div>
+        <div class="tags">
+            <ul>
+                <li><a href="#">Дизайн</a></li>
+                <li><a href="#">Веб-разработка</a></li>
+                <li><a href="#">Мобильная разработка</a></li>
+                <li><a href="#">Маркетинг</a></li>
+            </ul>
+        </div>
+    </div>
 </div>

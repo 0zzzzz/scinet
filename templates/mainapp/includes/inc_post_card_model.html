@@ -1,19 +1,34 @@
 {% load media_tags %}
 
 {% for post in filter.qs %}
-<div class="card mb-3">
-    <div class="card-header d-flex justify-content-start">
-        {% include 'mainapp/includes/inc_card_header_reactions.html' %}
-    </div>
-    {# <img src="/media/{{ post.image|index_empty }}" class="card-img-top" alt="img">#}
-    <div class="card-body">
-        <h5 class="card-title">{{ post.name }}</h5>
-        <p class="card-text">{{ post.text|truncatechars:200 }}</p>
-        {# <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}
-    </div>
-    <a href="{% url 'blogs:post_read' post.id %}" class="read_more">Читать далее...</a>
+<!--<div class="card mb-3">-->
+<!--    <div class="card-header d-flex justify-content-start">-->
+<!--        {% include 'mainapp/includes/inc_card_header_reactions.html' %}-->
+<!--    </div>-->
+<!--    {# <img src="/media/{{ post.image|index_empty }}" class="card-img-top" alt="img">#}-->
+<!--    <div class="card-body">-->
+<!--        <h5 class="card-title">{{ post.name }}</h5>-->
+<!--        <p class="card-text">{{ post.text|truncatechars:200|safe }}</p>-->
+<!--        {# <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}-->
+<!--    </div>-->
+<!--    <a href="{% url 'blogs:post_read' post.id %}" class="read_more">Читать далее...</a>-->
 
-    <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">
+<!--    <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">-->
 
+<!--</div>-->
+<div class="col-xl-6 col-md-6">
+    <div class="single_blog">
+        <div class="blog_thumb">
+            {% include 'mainapp/includes/inc_card_header_reactions.html' %}
+            <a href="#">
+                <img src="/media/{{ post.image }}" alt="" onerror="this.style.opacity='0'">
+            </a>
+        <p class="card-text">{{ post.text|truncatechars:200|safe }}</p>
+        </div>
+        <div class="blog_meta">
+            <h3>{{ post.name|truncatechars:20 }}</h3>
+            <p><a href="{% url 'blogs:post_read' post.id %}">Читать...</a></p>
+        </div>
+    </div>
 </div>
 {% endfor %}

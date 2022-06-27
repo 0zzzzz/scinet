@@ -1,18 +1,16 @@
 {% load static %}
 {% load default %}
 
-<div class="user-info d-flex pt-1">
-    <div class="user-photo pt-1">
+<div class="user-info d-flex pt-1" style="display:flex">
+    <div class="user-photo pt-1 user-photo-post">
         <a href="{% url 'authapp:profile_user' post.user.username %}">
-            <img src="{{ post.user.avatar|media_for_users }}" alt="user-logo" width="30px" height="30px"></a>
+            <img src="{{ post.user.avatar|media_for_users }}" alt="user-logo" width="30px" height="30px"
+                 class="rounded-circle"></a>
     </div>
     <div class="user-name ms-3 pt-2">
         <p><a href="{% url 'authapp:profile_user' post.user.username %}" class="text-muted text-decoration-none">{{ post.user.username }}</a></p>
     </div>
-    <div class="passed-time ms-3 pt-2">
-        <small class="text-muted">{{ post.updated_at }}</small>
-    </div>
-    <div class="reactions-block pt-2 d-flex">
+    <div class="reactions-block pt-2 d-flex" style="padding-left: 13px;">
         <div class="total-views ms-3">
             <a href="#" class="text-muted text-decoration-none"><img
                     src="{% static 'img/eye.svg' %}"
@@ -34,4 +32,7 @@
                     alt="views" width="25px">1000</a>
         </div>
     </div>
+</div>
+<div class="passed-time ms-3 pt-2">
+    <small class="text-muted">{{ post.updated_at }}</small>
 </div>

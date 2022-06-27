@@ -1,57 +1,68 @@
 {% load default %}
-{#<div class="d-flex ">#}
-{#        {% for link_item in links_menu %}#}
-{#            <li><a href="{% url 'mainapp:sections' link_item.pk %}">#}
-{#                {{ link_item.name }}#}
-{#            </a>#}
-{#            </li>#}
-{#        {% endfor %}#}
-{##}
-{##}
-{#    {% if user.is_authenticated %}#}
-{#        {% if user.is_superuser %}#}
-{#            <a class="nav-link" style="color:#ba1b1b"#}
-{#               href="{% url 'auth:edit' %}">Администратор:{{ user.username }}</a>#}
-{#        {% else %}#}
-{#            <a class="nav-link"#}
-{#               href="{% url 'auth:edit' %}">Редактировать: {{ user.first_name|default:'пользователь' }}</a>#}
-{#        {% endif %}#}
-{#        <a class="nav-link " href="">Выйти</a>#}
-{#    {% else %}#}
-{#        <a class="nav-link btn" href="{% url 'auth:login' %}">Войти</a>#}
-{#        <a class="nav-link btn" href="{% url 'auth:register' %}">Регистрация</a>#}
-{#    {% endif %}#}
-{#    {% if user.is_superuser %}#}
-{#        <a class="nav-link" style="color:#ba1b1b" href="{% url 'auth:users_list' %}">Пользователи</a>#}
-{#    {% endif %}#}
-{#</div>#}
+<!--{#-->
+<!--<div class="d-flex ">#}-->
+<!--    {# {% for link_item in links_menu %}#}-->
+<!--    {#-->
+<!--    <li><a href="#}">#}-->
+<!--        {# {{ link_item.name }}#}-->
+<!--        {# </a>#}-->
+<!--        {#-->
+<!--    </li>-->
+<!--    #}-->
+<!--    {# {% endfor %}#}-->
+<!--    {##}-->
+<!--    {##}-->
+<!--    {# {% if user.is_authenticated %}#}-->
+<!--    {# {% if user.is_superuser %}#}-->
+<!--    {# <a class="nav-link" style="color:#ba1b1b" #}-->
+<!--          {# href="{% url 'auth:edit' %}">Администратор:{{ user.username }}</a>#}-->
+<!--    {# {% else %}#}-->
+<!--    {# <a class="nav-link" #}-->
+<!--          {# href="{% url 'auth:edit' %}">Редактировать: {{ user.first_name|default:'пользователь' }}</a>#}-->
+<!--    {# {% endif %}#}-->
+<!--    {# <a class="nav-link " href="">Выйти</a>#}-->
+<!--    {# {% else %}#}-->
+<!--    {# <a class="nav-link btn" href="{% url 'auth:login' %}">Войти</a>#}-->
+<!--    {# <a class="nav-link btn" href="{% url 'auth:register' %}">Регистрация</a>#}-->
+<!--    {# {% endif %}#}-->
+<!--    {# {% if user.is_superuser %}#}-->
+<!--    {# <a class="nav-link" style="color:#ba1b1b" href="{% url 'auth:users_list' %}">Пользователи</a>#}-->
+<!--    {# {% endif %}#}-->
+<!--    {#-->
+<!--</div>#}-->
 
 
-<div class="flex-shrink-0 dropdown d-flex {% if new_notify %} notification_seen {% endif %}">
+<div class="flex-shrink-0 dropdown d-flex" style="display: flex;">
     {% if user.is_authenticated %}
-        <a href="{% url 'authapp:profile_user' user.username %}" class="d-block link-dark text-decoration-none dropdown-toggle"
-           data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{ user.avatar | media_for_users}}" alt="mdo" width="32" height="32" class="rounded-circle">
-            {{ user.username| default:'Пользователь' }} </a>
-        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
-            {% if user.is_superuser %}
-                <li><a class="dropdown-item" href="#">Админ панель</a></li>
-            {% endif %}
-            <li><a class="dropdown-item" href="{% url 'authapp:profile_user' user.username %}">Мой Профиль</a></li>
-            <li><a class="dropdown-item {% if new_notify %} notification_seen {% endif %} " href="{% url 'blogapp:notifications' %}">Уведомления</a></li>
-            <li><a class="dropdown-item" href="{% url 'authapp:section_subscribe' %}">Моя лента</a></li>
-            <li><a class="dropdown-item" href="{% url 'blogapp:post_create' %}">Создать статью</a></li>
-            <li><a class="dropdown-item" href="{% url 'authapp:posts_user_list' %}">Мои статьи</a></li>
-            <li><a class="dropdown-item" href="{% url 'authapp:user_comments' %}">Мои коментарии</a></li>
-            <li><a class="dropdown-item" href="#">Диалоги</a></li>
-            <li><a class="dropdown-item" href="{% url 'blogapp:favorites' %}">Мои Закладки</a></li>
+    <a href="{% url 'authapp:profile_user' user.username %}"
+       class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser"
+       data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="{{ user.avatar | media_for_users}}" alt="mdo" width="32" height="32" class="rounded-circle">
+        {{ user.username| default:'Пользователь' }} </a>
+    <nav class="dws-menu">
+        <ul>
             <li>
-                <hr class="dropdown-divider">
+                <img src="https://w7.pngwing.com/pngs/342/85/png-transparent-penrose-triangle-shape-inverted-triangle-angle-text-rectangle.png" style="max-width: 10px;">
+                <ul>
+                    {% if user.is_superuser %}
+                    <li><a class="dropdown-item" href="#">Админ панель</a></li>
+                    {% endif %}
+                    <li><a class="dropdown-item" href="{% url 'authapp:profile_user' user.username %}">Мой Профиль</a>
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'blogapp:notifications' %}">Уведомления</a></li>
+                    <li><a class="dropdown-item" href="{% url 'authapp:section_subscribe' %}">Моя лента</a></li>
+                    <li><a class="dropdown-item" href="{% url 'blogapp:post_create' %}">Создать статью</a></li>
+                    <li><a class="dropdown-item" href="{% url 'authapp:posts_user_list' %}">Мои статьи</a></li>
+                    <li><a class="dropdown-item" href="{% url 'authapp:user_comments' %}">Мои коментарии</a></li>
+                    <li><a class="dropdown-item" href="#">Диалоги</a></li>
+                    <li><a class="dropdown-item" href="{% url 'blogapp:favorites' %}">Мои Закладки</a></li>
+                    <li><a class="dropdown-item" href="{% url 'auth:logout' %}">Выйти</a></li>
+                </ul>
             </li>
-            <li><a class="dropdown-item" href="{% url 'auth:logout' %}">Выйти</a></li>
         </ul>
+    </nav>
     {% else %}
-        <a class="nav-link btn" href="{% url 'auth:login' %}">Войти</a>
-        <a class="nav-link btn" href="{% url 'auth:register' %}">Регистрация</a>
+    <p><a href="{% url 'auth:login' %}"><i class="flaticon-user"></i>Войти</a> | <a href="{% url 'auth:register' %}">Регистрация</a>
+    </p>
     {% endif %}
 </div>

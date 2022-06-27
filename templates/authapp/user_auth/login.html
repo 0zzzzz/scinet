@@ -2,11 +2,12 @@
 {% load static %}
 
 {% block content %}
-    <div class="container border">
+    <div class="container border content">
         <a href="{% url 'index' %}"></a>
         <div class="h2 text-center head">
             <br>
             Вход в систему
+             <br>
         </div>
         <form class="form-horizontal" action="{% url 'authapp:login' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -15,7 +16,7 @@
             </table>
             {{ error_text }}
             <br>
-            <input class="auth_button enter" type="submit" value="Войти">
+            <input class="auth_button enter" type="submit" value="Войти" style="max-width: 325px;">
             <br>
         </form>
     </div>

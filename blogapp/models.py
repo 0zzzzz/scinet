@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models import Sum
 from django.contrib.contenttypes.fields import GenericRelation
+from ckeditor.fields import RichTextField
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -69,7 +70,8 @@ class SNPosts(models.Model):
     user = models.ForeignKey(SNUser, on_delete=models.CASCADE, verbose_name='Автор')
     name = models.CharField(max_length=128, verbose_name='Заголовок поста')
     image = models.ImageField(upload_to='posts', blank=True, null=True, verbose_name='Превьюшка поста')
-    text = models.TextField(verbose_name='Текст поста')
+    # text = models.TextField(verbose_name='Текст поста')
+    text = RichTextField(verbose_name='Текст поста')
     short_desc = models.CharField(max_length=255, verbose_name='Краткое описание поста')
     is_active = models.BooleanField(default=True, db_index=True)
     is_moderated = models.BooleanField(default=False)
@@ -103,8 +105,6 @@ class Comments(models.Model):
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
-
-    
 
 
 class SNSubscribe(models.Model):

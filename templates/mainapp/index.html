@@ -4,43 +4,59 @@
 {% load default %}
 
 {% block content %}
-        <div class="container">
-            <div class="col-12 d-flex justify-content-between">
-                <div class="col-8 me-4">
-                    <div class="row border bg-light">
-                        <p class="text-uppercase pt-2 fs-3">все потоки</p>
-                        <div class="thread-header">
-                            <div class="navbar navbar-expand-lg d-flex pb-3">
-                                <a class="text-uppercase text-decoration-none text-muted me-3" href="#">статьи</a>
-                                <a class="text-uppercase text-decoration-none text-muted me-3" href="#">новости</a>
-                                <a class="text-uppercase text-decoration-none text-muted me-3" href="#">хабы</a>
-                                <a class="text-uppercase text-decoration-none text-muted me-3" href="#">авторы</a>
-                                <a class="text-uppercase text-decoration-none text-muted me-3" href="#">компании</a>
-                            </div>
-                                <form class="d-flex" role="search" method="GET">
-                                    {% for field in filter.form %}
-                                        {{ field }}
-                                    {% endfor %}
-                                    <button class="btn btn-outline-secondary" type="submit">Найти</button>
-                                </form>
-                                <br>
-                        </div>
-                    </div>
-                    <div class="pt-3"></div>
-                    <div class="d-flex justify-content-between">
-                        {% if user.is_authenticated %}
-                            <h2> scinet ждёт твой новый пост +</h2>
-                            <p><a class="btn btn-outline-secondary text-muted me-3"
-                                  href="{% url 'blogs:post_create' %}">Добавить</a></p>
-                        {% endif %}
-                    </div>
-
-                    {% include 'mainapp/includes/inc_post_card_model.html' %}
-
-                </div>
-                <div class="col-4">
-                    {% include 'mainapp/includes/inc_right_menu.html' %}
+<!--        <div class="container">-->
+<!--            <div class="col-12 d-flex justify-content-between">-->
+<!--                <div class="col-8 me-4">-->
+<!--                    <div class="row border bg-light">-->
+<!--                        <p class="text-uppercase pt-2 fs-3">все потоки</p>-->
+<!--                        <div class="thread-header">-->
+<!--                                <form class="d-flex" role="search" method="GET">-->
+<!--                                    {% for field in filter.form %}-->
+<!--                                        {{ field }}-->
+<!--                                    {% endfor %}-->
+<!--                                    <button class="btn btn-outline-secondary" type="submit">Найти</button>-->
+<!--                                </form>-->
+<!--                                <br>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="pt-3"></div>-->
+<!--                    <div class="d-flex justify-content-between">-->
+<!--                        {% if user.is_authenticated %}-->
+<!--                            <h2> scinet ждёт твой новый пост +</h2>-->
+<!--                            <p><a class="btn btn-outline-secondary text-muted me-3"-->
+<!--                                  href="{% url 'blogs:post_create' %}">Добавить</a></p>-->
+<!--                        {% endif %}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-4">-->
+<!--                    {% include 'mainapp/includes/inc_right_menu.html' %}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<div class="most_recent_blog">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section_title mb-33">
+                    {% if user.is_authenticated %}
+                    <h3>SciNet ждет твой новый пост</h3>
+                    <p><a class="btn btn-outline-secondary text-muted me-3 add" href="{% url 'blogs:post_create' %}">Добавить</a>
+                    </p>
+                    {% endif %}
                 </div>
             </div>
+            <div class="col-xl-8 col-md-8">
+                {% include 'mainapp/includes/inc_post_card_model.html' %}
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="btn_area text-center">
+                            <a href="#" class="boxed-btn">Load More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include 'mainapp/includes/inc_right_menu.html' %}
         </div>
+    </div>
+</div>
 {% endblock %}

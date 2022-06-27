@@ -3,11 +3,12 @@
 
 {% block content %}
 <div class="container post_form">
-    <h2>Новый пост</h2>
+    <h2>Твой пост:</h2>
     <div class="admin_block col-6">
         <form class="form-horizontal" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form }}
+            {{ form.media }}
+            {{ form.as_p }}
             <br>
             <input class="auth_button btn-block btn-primary col-4" type="submit" value="Загрузить статью">
         </form>

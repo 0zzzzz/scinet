@@ -9,7 +9,8 @@
     <div class="container admin_block pt-5 col-6">
         <form class="form-horizontal" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form }}
+            {{ form.media }}
+            {{ form.as_p }}
             <input class="auth_button btn-block btn-primary col-4" type="submit" value="Сохранить">
         </form>
     </div>

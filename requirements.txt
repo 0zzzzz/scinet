@@ -1,7 +1,10 @@
 asgiref==3.5.2
+backports.zoneinfo==0.2.1
 Django==4.0.4
 django-bootstrap3==21.2
+django-ckeditor==6.4.2
 django-filter==22.1
+django-js-asset==2.0.0
 djangorestframework==3.13.1
 Pillow==9.1.1
 psycopg2-binary==2.9.3

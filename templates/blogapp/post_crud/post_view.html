@@ -3,39 +3,47 @@
 {% load media_tags %}
 {% load bootstrap3 %}
 
+{% block js %}
+    <script src="{% static 'js/likes.js' %}"></script>
+    <script src="{% static 'js/favorite.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'js/likes.js' %}"></script>
+    <script src="{% static 'js/favorite.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     <div class="container text">
         <br>
-        <h1>{{ post.name }}</h1>
-        {% if user.is_authenticated %}
-            {% if is_favorite %}
-                <img id='favorite' data-id="{{ post.id }}" data-action="on" src="{% static 'img/star-on.svg' %}" width="25">
-            {% else %}
-                <img id='favorite' data-id="{{ post.id }}" data-action="off" src="{% static 'img/star-off.svg' %}" width="25">
+        <div style="display: flex">
+            {% if user.is_authenticated %}
+                {% if is_favorite %}
+                    <img id='favorite' data-id="{{ post.id }}" data-action="on" src="{% static 'img/star-on.svg' %}" width="25">
+                {% else %}
+                    <img id='favorite' data-id="{{ post.id }}" data-action="off" src="{% static 'img/star-off.svg' %}" width="25">
+                {% endif %}
             {% endif %}
-        {% endif %}
+            <h1>{{ post.name }}</h1>
+        </div>
         <br>
-        <p>{{ post.text }}</p>
+        <p>{{ post.text|safe }}</p>
         <br>
         <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">
-        {% block js %}
-            <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
-            <script src="{% static 'js/likes.js' %}"></script>
-            <script src="{% static 'js/favorite.js' %}"></script>
-        {% endblock %}
-        {% if user.id == post.user.id or user.is_moderator or user.is_superuser %}
-            <a href="{% url 'blogs:post_update' post.id %}"
-               class="btn btn-outline-secondary me-2 col-4">Редактировать</a>
+        <div>
+            {% if user.id == post.user.id or user.is_moderator or user.is_superuser %}
+                <a href="{% url 'blogs:post_update' post.id %}"
+                   class="btn btn-outline-secondary me-2 col-4" style="padding-left: 0px;">Редактировать</a>
 
-            <a href="{% url 'blogs:post_delete' post.id %}"
-               class="btn btn-outline-secondary me-2 col-4">
-                {% if post.is_active %}
-                    Скрыть
-                {% else %}
-                    Восстановить
-                {% endif %}
-            </a>
-        {% endif %}
+
+                <a href="{% url 'blogs:post_delete' post.id %}"
+                   class="btn btn-outline-secondary me-2 col-4">
+                    {% if post.is_active %}
+                        Скрыть
+                    {% else %}
+                        Восстановить
+                    {% endif %}
+                </a>
+            {% endif %}
+        </div>
         {% if user.is_authenticated %}
             <ul class="likes">
                 <li data-id="{{ post.id }}" data-type="post" data-action="like" title="Нравится">

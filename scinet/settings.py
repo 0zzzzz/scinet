@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'bootstrap3',
     'django_filters',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
