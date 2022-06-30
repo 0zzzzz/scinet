@@ -1,38 +1,40 @@
 {% load static %}
 {% load default %}
 
-<div class="user-info d-flex pt-1" style="display:flex">
-    <div class="user-photo pt-1 user-photo-post">
-        <a href="{% url 'authapp:profile_user' post.user.username %}">
-            <img src="{{ post.user.avatar|media_for_users }}" alt="user-logo" width="30px" height="30px"
-                 class="rounded-circle"></a>
+<div class="post-user-info d-flex pt-1">
+    <div class="user-info">
+        <div class="user-photo pt-1 user-photo-post">
+            <a href="{% url 'authapp:profile_user' post.user.username %}">
+                <img src="{{ post.user.avatar|media_for_users }}" alt="user-logo" width="30px" height="30px"
+                     class="rounded-circle"></a>
+        </div>
+        <div class="user-name ms-3 pt-2">
+                <p><a href="{% url 'authapp:profile_user' post.user.username %}" class="text-muted text-decoration-none">{{ post.user.username }}</a></p>
+        </div>
     </div>
-    <div class="user-name ms-3 pt-2">
-        <p><a href="{% url 'authapp:profile_user' post.user.username %}" class="text-muted text-decoration-none">{{ post.user.username }}</a></p>
+    <div class="passed-time ms-3 pt-2" style="padding: 1px 10px;">
+        <small class="text-muted">{{ post.updated_at }}</small>
     </div>
     <div class="reactions-block pt-2 d-flex" style="padding-left: 13px;">
-        <div class="total-views ms-3">
-            <a href="#" class="text-muted text-decoration-none"><img
-                    src="{% static 'img/eye.svg' %}"
-                    alt="views" width="25px">1000</a>
+        <div class="total-views ms-3" >
+            <a href="#" class="text-muted text-decoration-none" style="display:flex"><img
+                    src="{% static 'img/show.png' %}"
+                    alt="views" width="30px">&nbsp;{{ post.total_views }}&nbsp;</a>
         </div>
-        <div class="total-vote ms-3">
-            <a href="#" class="text-muted text-decoration-none"><img
-                    src="{% static 'img/vote.svg' %}"
-                    alt="views" width="25px">{{ post.votes.sum_rating }}</a>
+        <div class="total-vote ms-3" style="padding-left: 30px;">
+            <a href="#" class="text-muted text-decoration-none" style="display:flex"><img
+                    src="{% static 'img/like.png' %}"
+                    alt="views" width="20px">&nbsp;{{ post.votes.sum_rating }}&nbsp;</a>
         </div>
-        <div class="total-bookmarks ms-3">
-            <a href="#" class="text-muted text-decoration-none"><img
-                    src="{% static 'img/bookmark.svg' %}"
-                    alt="views" width="25px">1000</a>
+        <div class="total-bookmarks ms-3" style="padding-left: 5px;">
+            <a href="#" class="text-muted text-decoration-none" style="display:flex"><img
+                    src="{% static 'img/star.png' %}"
+                    alt="views" width="25px">&nbsp;{{ post.total_favourites }}&nbsp;</a>
         </div>
-        <div class="total-comments ms-3">
-            <a href="#" class="text-muted text-decoration-none"><img
-                    src="{% static 'img/message.svg' %}"
-                    alt="views" width="25px">1000</a>
+        <div class="total-comments ms-3" style="padding-left: 30px;">
+            <a href="#" class="text-muted text-decoration-none" style="display:flex"><img
+                    src="{% static 'img/chat.png' %}"
+                    alt="views" width="25px">&nbsp;{{ post.total_comments }}&nbsp;</a>
         </div>
     </div>
-</div>
-<div class="passed-time ms-3 pt-2">
-    <small class="text-muted">{{ post.updated_at }}</small>
 </div>

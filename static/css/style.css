@@ -29,10 +29,6 @@ body {
 /* line 13, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/theme-default.scss */
 .img {
   max-width: 100%;
-  -webkit-transition: 0.3s;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
 }
 
 /* line 17, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/theme-default.scss */
@@ -374,7 +370,7 @@ h3 {
 }
 
 /* line 12, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_section_title.scss */
-.section_title h3::before {
+/*.section_title h3::before {
   position: absolute;
   content: "";
   width: 20px;
@@ -385,7 +381,7 @@ h3 {
   top: 50%;
   margin-top: 3.5px;
   right: -70px;
-}
+}*/
 
 @media (max-width: 767px) {
   /* line 24, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_section_title.scss */
@@ -1383,14 +1379,6 @@ h3 {
 /* line 15, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_recent_blog.scss */
 .most_recent_blog .single_blog .blog_thumb a img {
   width: 100%;
-  -webkit-transform: scale(1);
-  -moz-transform: scale(1);
-  -ms-transform: scale(1);
-  transform: scale(1);
-  -webkit-transition: 0.3s;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
 }
 
 /* line 23, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_recent_blog.scss */
@@ -1442,12 +1430,7 @@ h3 {
 }
 
 /* line 61, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_recent_blog.scss */
-.most_recent_blog .single_blog:hover .blog_thumb img {
-  -webkit-transform: scale(1.2);
-  -moz-transform: scale(1.2);
-  -ms-transform: scale(1.2);
-  transform: scale(1.2);
-}
+
 
 @media (max-width: 767px) {
   /* line 71, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_recent_blog.scss */
@@ -1591,9 +1574,9 @@ h3 {
 
 /* line 161, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_recent_blog.scss */
 .most_recent_blog .tags ul li a:hover {
-  background: #F4A919;
+  background: #adadd8;
   color: #fff;
-  border: 1px solid #F4A919;
+  border: 1px solid #adadd8;
 }
 
 /* line 172, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_recent_blog.scss */
@@ -1841,16 +1824,7 @@ h3 {
 }
 
 /* line 21, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_instagram_area.scss */
-.instagram_media_area .single_instragram img {
-  -webkit-transform: scale(1);
-  -moz-transform: scale(1);
-  -ms-transform: scale(1);
-  transform: scale(1);
-  -webkit-transition: 0.3s;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
-}
+
 
 @media (max-width: 767px) {
   /* line 21, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_instagram_area.scss */
@@ -1877,12 +1851,7 @@ h3 {
 }
 
 /* line 38, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_instagram_area.scss */
-.instagram_media_area .single_instragram:hover img {
-  -webkit-transform: scale(1.1);
-  -moz-transform: scale(1.1);
-  -ms-transform: scale(1.1);
-  transform: scale(1.1);
-}
+
 
 /* line 1, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_footer.scss */
 .footer {

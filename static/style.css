@@ -193,6 +193,23 @@ body {
     justify-content: center;
 }
 
+.single_blog{
+    border: 2px solid #aeafd9;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.hr{
+    margin: 0px 5px;
+    color: #aeafd9;
+    background_color: #aeafd9;
+    padding-top: 2px;
+}
+
+.blog_header{
+    text-align: center;
+    margin: 5px 5px;
+}
 
 .useradd_button {
     background-image: url(/static/img/plus_cross.png);
@@ -296,6 +313,9 @@ ul.likes {
     display: flex;
 }
 
+.notifications_main {
+    padding: 20px;
+}
 
 .notification_seen {
     background-color: #d0f5f5;
@@ -330,17 +350,29 @@ ul.navigation {
     display: flex;
 }
 
+.post-user-info{
+    display:flex;
+    justify-content: space-between;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: row;
+}
+
 .reactions-block {
     display: flex;
+    padding: 0px 5px;
 }
 
 .ms-3{
-    padding-right: 15px;
+    padding: 0px 7px;
 }
 
 .text-muted {
     color: #777;
     max-width: 20px;
+    text-align: center;
 }
 
 .user-photo-post {

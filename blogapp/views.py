@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from adminapp.views import AccessMixin, DeleteMixin
 from authapp.models import SNUser
 from blogapp.forms import SNPostForm, CommentForm
-from blogapp.models import SNPosts, Comments, LikeDislike, Notifications, SNFavorites
+from blogapp.models import SNPosts, Comments, LikeDislike, Notifications, SNFavorites, Ip
 
 import json
 from django.http import HttpResponse
@@ -26,6 +26,15 @@ class SNPostDetailView(DetailView):
     form_class = CommentForm
 
     def get_context_data(self, *args, **kwargs):
+        """Засчитывание просмотров"""
+        ip = get_user_ip(self.request)
+        try:
+            ip_object = Ip.objects.get(ip=ip)
+        except Ip.DoesNotExist:
+            ip_object = Ip.create(ip=ip)
+            ip_object.save()
+        self.object.views.add(ip_object)
+
         context = super().get_context_data(**kwargs)
         context['form'] = self.form_class
         context['post'] = SNPosts.objects.get(pk=self.kwargs['pk'])
@@ -212,6 +221,16 @@ class VotesView(View):
         )
 
 
+"""Функции для обработки просмотров"""
+def get_user_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[-1].strip()
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
 """Уведомления"""
 @method_decorator(login_required, name='dispatch')
 class NotificationListView(ListView):
@@ -261,38 +280,41 @@ def make_equal_notifications(notifications):
     user_notifications = notifications
     notifications_list = []
     for notify in user_notifications:
-        new_obj = dict()
-        new_obj['pk'] = notify.id
-        new_obj['from_user'] = notify.from_user
-        new_obj['created_at'] = notify.created_at
-        new_obj['is_seen'] = notify.is_seen
-        content_type = notify.content_type
-        # Проверяем, что за контент несет с собой уведомление
-        if content_type.model == 'snposts':
-            new_obj['name'] = 'одобрил публикацию поста:'
-            post = content_type.get_object_for_this_type(id=notify.object_id)
-        elif content_type.model == 'comments':
-            comment = content_type.get_object_for_this_type(id=notify.object_id)
-            new_obj['name'] = f'оставил комментарий: "{comment.text}" под постом:'
-            post = comment.post
-        elif content_type.model == 'likedislike':
-            # У лайков тоже свой контент, поэтому еще проверки
-            like = content_type.get_object_for_this_type(id=notify.object_id)
-            liked_object = like.content_type.get_object_for_this_type(id=like.object_id)
-            if like.content_type.model == 'snposts':
-                if like.vote == 1:
-                    new_obj['name'] = 'оценил пост:'
-                else:
-                    new_obj['name'] = 'негативно оценил пост:'
-                post = liked_object
-            elif like.content_type.model == 'comments':
-                if like.vote == 1:
-                    new_obj['name'] = f'оценил комментарий под постом: {liked_object.post.name}'
-                else:
-                    new_obj['name'] = f'негативно оценил комментарий под постом: {liked_object.post.name}'
-                post = liked_object.post
-        new_obj['post'] = post
-        notifications_list.append(new_obj)
+        try:
+            new_obj = dict()
+            new_obj['pk'] = notify.id
+            new_obj['from_user'] = notify.from_user
+            new_obj['created_at'] = notify.created_at
+            new_obj['is_seen'] = notify.is_seen
+            content_type = notify.content_type
+            # Проверяем, что за контент несет с собой уведомление
+            if content_type.model == 'snposts':
+                new_obj['name'] = 'одобрил публикацию поста:'
+                post = content_type.get_object_for_this_type(id=notify.object_id)
+            elif content_type.model == 'comments':
+                comment = content_type.get_object_for_this_type(id=notify.object_id)
+                new_obj['name'] = f'оставил комментарий: "{comment.text}" под постом:'
+                post = comment.post
+            elif content_type.model == 'likedislike':
+                # У лайков тоже свой контент, поэтому еще проверки
+                like = content_type.get_object_for_this_type(id=notify.object_id)
+                liked_object = like.content_type.get_object_for_this_type(id=like.object_id)
+                if like.content_type.model == 'snposts':
+                    if like.vote == 1:
+                        new_obj['name'] = 'оценил пост:'
+                    else:
+                        new_obj['name'] = 'негативно оценил пост:'
+                    post = liked_object
+                elif like.content_type.model == 'comments':
+                    if like.vote == 1:
+                        new_obj['name'] = f'оценил комментарий под постом: {liked_object.post.name}'
+                    else:
+                        new_obj['name'] = f'негативно оценил комментарий под постом: {liked_object.post.name}'
+                    post = liked_object.post
+            new_obj['post'] = post
+            notifications_list.append(new_obj)
+        except (LikeDislike.DoesNotExist, Comments.DoesNotExist, SNPosts.DoesNotExist) as e:
+            notify.is_seen = True
     return notifications_list
 
 
@@ -331,7 +353,6 @@ def check_notifications(request):
         result = render_to_string('mainapp/includes/inc_menu.html', context)
 
         return JsonResponse({'result': result})
-
 
 
 def notify_like(likedislike):

@@ -32,7 +32,7 @@
 <!--</div>#}-->
 
 
-<div class="flex-shrink-0 dropdown d-flex" style="display: flex;">
+<div class="flex-shrink-0 dropdown d-flex {% if new_notify %} notification_seen {% endif %}" style="display: flex;">
     {% if user.is_authenticated %}
     <a href="{% url 'authapp:profile_user' user.username %}"
        class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser"

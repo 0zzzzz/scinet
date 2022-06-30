@@ -64,6 +64,15 @@ class LikeDislike(models.Model):
     objects = LikeDislikeManager()
 
 
+class Ip(models.Model):
+    ip = models.CharField(max_length=100)
+
+    @classmethod
+    def create(cls, ip):
+        notification = cls(ip=ip)
+        return notification
+
+
 class SNPosts(models.Model):
     """Посты"""
     section = models.ForeignKey(SNSections, on_delete=models.CASCADE, verbose_name='Раздел поста', **NULLABLE)
@@ -78,6 +87,7 @@ class SNPosts(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     votes = GenericRelation(LikeDislike, related_query_name='snposts')
+    views = models.ManyToManyField(Ip, related_name="post_views", blank=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -91,6 +101,19 @@ class SNPosts(models.Model):
         self.is_active = True
         self.save()
 
+    @property
+    def total_comments(self):
+        comments = Comments.objects.filter(post=self)
+        return len(comments)
+
+    @property
+    def total_favourites(self):
+        favourites = SNFavorites.objects.filter(post=self)
+        return len(favourites)
+
+    @property
+    def total_views(self):
+        return self.views.count()
 
 class Comments(models.Model):
     """Комментарии"""
@@ -116,20 +139,10 @@ class SNSubscribe(models.Model):
 class Notifications(models.Model):
     """Уведомления"""
 
-    # LIKE_NOTIFICATION = 'L'
-    # COMMENT_NOTIFICATION = 'C'
-    #
-    # MODES = (
-    #     (LIKE_NOTIFICATION, 'Лайк'),
-    #     (COMMENT_NOTIFICATION, 'Комментарий')
-    # )
-
-    # post = models.ForeignKey(SNPosts, on_delete=models.CASCADE, verbose_name='Пост')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_seen = models.BooleanField(default=False, db_index=True)
     is_active = models.BooleanField(default=True, db_index=True)
-    # mode = models.CharField(max_length=1, verbose_name="Вид уведомления", choices=MODES, default=LIKE_NOTIFICATION)
     from_user = models.ForeignKey(SNUser, on_delete=models.CASCADE, verbose_name='Уведомитель',
                                   related_name='%(class)s_notifier')
     to_user = models.ForeignKey(SNUser, on_delete=models.CASCADE, verbose_name='Пользователь',

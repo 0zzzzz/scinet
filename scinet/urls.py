@@ -7,7 +7,7 @@ from blogapp import views as blogapp
 
 urlpatterns = [
     path('', mainapp.SNPostsListView.as_view(), name='index'),
-    # path('sections/', include('mainapp.urls', namespace='sections')),
+    path('sections/', include('mainapp.urls', namespace='sections')),
     path('posts/', include('blogapp.urls', namespace='blogs')),
     path('auth/', include('authapp.urls', namespace='auth')),
     path('adminapp/', include('adminapp.urls', namespace='adminapp')),

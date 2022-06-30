@@ -16,19 +16,31 @@
 <!--    <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">-->
 
 <!--</div>-->
-<div class="col-xl-6 col-md-6">
-    <div class="single_blog">
-        <div class="blog_thumb">
-            {% include 'mainapp/includes/inc_card_header_reactions.html' %}
-            <a href="#">
-                <img src="/media/{{ post.image }}" alt="" onerror="this.style.opacity='0'">
-            </a>
-        <p class="card-text">{{ post.text|truncatechars:200|safe }}</p>
-        </div>
+{#<div class="col-xl-6 col-md-6">#}
+{#    <div class="single_blog">#}
+{#        <div class="blog_thumb">#}
+{#            {% include 'mainapp/includes/inc_card_header_reactions.html' %}#}
+{#            <a href="#">#}
+{#                <img src="/media/{{ post.image }}" alt="" onerror="this.style.opacity='0'">#}
+{#            </a>#}
+{#        </div>#}
+{#        <div class="blog_meta">#}
+{#            <hr>#}
+{#            <h3 class="blog_header">{{ post.name|truncatechars:20 }}</h3>#}
+{#            <hr>#}
+{#            <p class="card-text">{{ post.text|truncatechars:200|safe }}</p>#}
+{#            <p><a href="{% url 'blogs:post_read' post.id %}">Читать...</a></p>#}
+<div class="single_blog">
+    <div class="blog_thumb">
+        {% include 'mainapp/includes/inc_card_header_reactions.html' %}
         <div class="blog_meta">
-            <h3>{{ post.name|truncatechars:20 }}</h3>
-            <p><a href="{% url 'blogs:post_read' post.id %}">Читать...</a></p>
+            <h3>{{ post.name }}</h3>
         </div>
+        <a href="#">
+            <img src="/media/{{ post.image }}" alt="" onerror="this.style.opacity='0'">
+        </a>
+        <p class="card-text" style="text-align: justify;">{{ post.text|truncatechars:200|safe }}</p>
+        <p><a href="{% url 'blogs:post_read' post.id %}">Читать...</a></p>
     </div>
 </div>
 {% endfor %}
