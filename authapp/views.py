@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.http import Http404
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView
 from django.views.generic import View
@@ -11,8 +11,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from authapp.forms import SNUserLoginForm, SNUserRegisterForm, SNUserEditForm, SNUserProfileEditForm
-from authapp.models import SNUser, SNUserProfile
+from authapp.forms import SNUserLoginForm, SNUserRegisterForm, SNUserEditForm, SNUserProfileEditForm, MessageForm
+from authapp.models import SNUser, SNUserProfile, SNChat, SNMessage
 from blogapp.models import SNPosts, SNSections, SNSubscribe, Comments
 from authapp.serializers import SNUserSerializer
 
@@ -194,7 +194,7 @@ class SNCommentsDetailView(ListView):
 
 class SNProfileDetailView(ListView):
     """Показывает всю активность данного пользователя"""
-    template_name = 'authapp/user_auth/show_profile.html'
+    template_name = 'authapp/user_auth/new_profile.html'
 
     def get(self, request, username):
         """Получаем для шаблона все данные конкретного пользователя"""
@@ -207,3 +207,62 @@ class SNProfileDetailView(ListView):
             'user_post_count': user_post_count,
         }
         return render(request, self.template_name, context=context)
+
+
+class SNDialogsView(View):
+    template_name = 'messages/dialogs_view.html'
+
+    def get(self, request):
+        chats = SNChat.objects.filter(members__in=[request.user.id])
+        return render(request, self.template_name, {'user_profile': request.user, 'chats': chats})
+
+
+class SNCreateDialogsView(View):
+    def get(self, request, user_id):
+        chats = SNChat.objects.filter(Q(id=user_id) | Q(id=request.user.id))
+        if chats.count() == 0:
+            chat = SNChat.objects.create()
+            chat.members.add(request.user)
+            chat.members.add(user_id)
+        else:
+            chat = chats.first()
+        return redirect(reverse('authapp:view_dialog', kwargs={'chat_id': chat.id}))
+
+
+class SNDialogView(View):
+    template_name = 'messages/messages_view.html'
+
+    def get(self, request, chat_id):
+        try:
+            chat = SNChat.objects.get(id=chat_id)
+            if request.user in chat.members.all():
+                if SNMessage.objects.filter(chat_id=chat_id):
+                    messages = SNMessage.objects.filter(chat_id=chat_id)
+                    messages.update(is_readed=True)
+                else:
+                    messages = {}
+            else:
+                messages = {}
+                chat = None
+        except SNChat.DoesNotExist:
+            chat = None
+
+        return render(
+            request,
+            self.template_name,
+            {
+                'user_profile': request.user,
+                'chat': chat,
+                'messages': messages,
+                'form': MessageForm()
+            }
+        )
+
+    def post(self, request, chat_id):
+        form = MessageForm(data=request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.chat_id = chat_id
+            message.author = request.user
+            message.save()
+        return redirect(reverse('authapp:view_dialog', kwargs={'chat_id': chat_id}))

@@ -1,4 +1,5 @@
 {% load default %}
+{% load static %}
 <!--{#-->
 <!--<div class="d-flex ">#}-->
 <!--    {# {% for link_item in links_menu %}#}-->
@@ -31,38 +32,39 @@
 <!--    {#-->
 <!--</div>#}-->
 
+<!-- <div class="flex-shrink-0 dropdown d-flex {% if new_notify %} notification_seen {% endif %}" style="display: flex;"> -->
 
-<div class="flex-shrink-0 dropdown d-flex {% if new_notify %} notification_seen {% endif %}" style="display: flex;">
+
+<div>
     {% if user.is_authenticated %}
-    <a href="{% url 'authapp:profile_user' user.username %}"
-       class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser"
-       data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="{{ user.avatar | media_for_users}}" alt="mdo" width="32" height="32" class="rounded-circle">
-        {{ user.username| default:'Пользователь' }} </a>
-    <nav class="dws-menu">
-        <ul>
+    <nav>
+        <ul class="topmenu">
             <li>
-                <img src="https://w7.pngwing.com/pngs/342/85/png-transparent-penrose-triangle-shape-inverted-triangle-angle-text-rectangle.png" style="max-width: 10px;">
-                <ul>
+                <a href="{% url 'authapp:profile_user' user.username %}"
+                   class="down {% if new_notify %}notification_seen{% endif %}">
+                    <img src="{{ user.avatar | media_for_users}}" alt="mdo" width="32" height="32"
+                         class="rounded-circle">
+                    {{ user.username| default:'Пользователь' }}</a>
+                <ul class="submenu">
                     {% if user.is_superuser %}
-                    <li><a class="dropdown-item" href="#">Админ панель</a></li>
+                    <li><a href="#">Админ панель</a></li>
                     {% endif %}
-                    <li><a class="dropdown-item" href="{% url 'authapp:profile_user' user.username %}">Мой Профиль</a>
+                    <li><a href="{% url 'authapp:profile_user' user.username %}">Мой Профиль</a>
                     </li>
-                    <li><a class="dropdown-item" href="{% url 'blogapp:notifications' %}">Уведомления</a></li>
-                    <li><a class="dropdown-item" href="{% url 'authapp:section_subscribe' %}">Моя лента</a></li>
-                    <li><a class="dropdown-item" href="{% url 'blogapp:post_create' %}">Создать статью</a></li>
-                    <li><a class="dropdown-item" href="{% url 'authapp:posts_user_list' %}">Мои статьи</a></li>
-                    <li><a class="dropdown-item" href="{% url 'authapp:user_comments' %}">Мои коментарии</a></li>
-                    <li><a class="dropdown-item" href="#">Диалоги</a></li>
-                    <li><a class="dropdown-item" href="{% url 'blogapp:favorites' %}">Мои Закладки</a></li>
-                    <li><a class="dropdown-item" href="{% url 'auth:logout' %}">Выйти</a></li>
+                    <li><a href="{% url 'blogapp:notifications' %}" {% if new_notify %}class="notification_seen"{% endif %}>Уведомления</a></li>
+                    <li><a href="{% url 'authapp:section_subscribe' %}">Моя лента</a></li>
+                    <li><a href="{% url 'blogapp:post_create' %}">Создать статью</a></li>
+                    <li><a href="{% url 'authapp:posts_user_list' %}">Мои статьи</a></li>
+                    <li><a href="{% url 'authapp:user_comments' %}">Мои коментарии</a></li>
+                    <li><a href="{% url 'authapp:user_dialogs' %}">Диалоги</a></li>
+                    <li><a href="{% url 'blogapp:favorites' %}">Мои Закладки</a></li>
+                    <li><a href="{% url 'auth:logout' %}">Выйти</a></li>
                 </ul>
             </li>
         </ul>
     </nav>
     {% else %}
-    <p><a href="{% url 'auth:login' %}"><i class="flaticon-user"></i>Войти</a> | <a href="{% url 'auth:register' %}">Регистрация</a>
+    <p style="margin-top: 22px;"><a href="{% url 'auth:login' %}"><i class="flaticon-user"></i>Войти</a> | <a href="{% url 'auth:register' %}">Регистрация</a>
     </p>
     {% endif %}
 </div>

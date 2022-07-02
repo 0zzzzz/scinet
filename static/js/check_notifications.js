@@ -4,7 +4,7 @@ function check_notifications() {
         if (data.result.new_notify) {
             $('#notes').addClass("notification_seen");
         }
-        $('.dropdown').html(data.result);
+        $('.topmenu').html(data.result);
     });
 }
 window.onload = check_notifications();

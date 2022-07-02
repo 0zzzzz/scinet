@@ -42,3 +42,16 @@ class SNUserProfile(models.Model):
     def update_user_profile(sender, instance, created, **kwargs):
         """Сигнал на обновление профиля"""
         instance.snuserprofile.save()
+
+
+class SNChat(models.Model):
+    members = models.ManyToManyField(SNUser, verbose_name='Участник чата')
+
+
+class SNMessage(models.Model):
+    chat = models.ForeignKey(SNChat, verbose_name="Номер чата", null=False, on_delete=models.CASCADE)
+    author = models.ForeignKey(SNUser, verbose_name="Автор сообщения", null=False, on_delete=models.CASCADE)
+    message = models.TextField(verbose_name="Сообщение")
+    pub_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата сообщения")
+    is_readed = models.BooleanField(default=False, verbose_name="Прочитано")
+

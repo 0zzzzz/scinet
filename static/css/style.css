@@ -392,7 +392,7 @@ h3 {
 
 /* line 31, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_section_title.scss */
 .mb-33 {
-  margin-bottom: 33px;
+  /*margin-bottom: 33px;*/
   display: flex;
 }
 
@@ -1363,7 +1363,7 @@ h3 {
 
 /* line 9, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_recent_blog.scss */
 .most_recent_blog .single_blog {
-  margin-bottom: 44px;
+  margin-bottom: 10px;
 }
 
 /* line 11, ../../Arafath/CL/CL August/204. Blog/204. Blog- HTML/scss/_recent_blog.scss */
@@ -1407,6 +1407,7 @@ h3 {
   .most_recent_blog .single_blog .blog_meta h3 {
     font-size: 20px;
     line-height: 26px;
+    margin: 0px;
   }
 }
 

@@ -3,93 +3,99 @@
 {% load media_tags %}
 
 {% block content %}
-            <div class="container pt-5 fs-4 d-flex justify-content-between">
-            <div>
-                <p class="fs-3 text-uppercase pt-3">Список постов</p>
-                <nav aria-label="page navigation">
-                    <ul class="pagination pagination-sm ">
-                        <li class="page-item"><a class="page-link text-muted" href="#">предыдущая</a></li>
-                        <li class="page-item"><a class="page-link text-muted" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link text-muted" href="#">следующая</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div>
-                {#            <p>            <a class="useradd_button" href={% url 'adminapp:post_create' %}>#}
-                <p><a class="btn btn-outline-primary text-dark" href={% url 'adminapp:post_create' %}>
-                    <span>новый пост</span>
-                </a></p>
-            </div>
+<div class="container pt-5 fs-4 d-flex justify-content-between">
+    <div>
+        <p class="fs-3 text-uppercase pt-3">Список постов</p>
+        <nav aria-label="page navigation">
+            <ul class="pagination pagination-sm ">
+                <li class="page-item"><a class="page-link text-muted" href="#">предыдущая</a></li>
+                <li class="page-item"><a class="page-link text-muted" href="#">1</a></li>
+                <li class="page-item"><a class="page-link text-muted" href="#">следующая</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div>
+        {# <p><a class="useradd_button" href={% url 'adminapp:post_create' %}>#}
+        <p><a class="btn btn-outline-primary text-dark" href={% url 'adminapp:post_create' %}>
+            <span>новый пост</span>
+            </a></p>
+    </div>
 
-        </div>
-    <br><br>
-    <div class="container users_list">
-        {% if object_list %}
-            <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Автор</th>
-                <th scope="col">Заголовок</th>
-                <th scope="col">Текст</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Статус</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
+</div>
+<br><br>
+<div class="container users_list">
+    {% if object_list %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Автор</th>
+            <th scope="col">Заголовок</th>
+            <th scope="col">Текст</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Статус</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
 
-            <tbody class="table-group-divider">
-            {% for object in object_list %}
-                <tr>
-                    <th scope="row">{{ object.id }}</th>
-                    <td>{{ object.user }}</td>
-                    <td>{{ object.name }}</td>
-                    <td>{{ object.text|truncatechars:100 }}</td>
-                    <td>{{ object.created_at }}</td>
-                    <td>{{ object.is_moderated }}</td>
+        <tbody class="table-group-divider">
+        {% for object in object_list %}
+        <tr>
+            <th scope="row">{{ object.id }}</th>
+            <td>{{ object.user }}</td>
+            <td>{{ object.name }}</td>
+            <td>{{ object.text|truncatechars:100 }}</td>
+            <td>{{ object.created_at }}</td>
+            <td>{{ object.is_moderated }}</td>
 
-                    {% if user.is_superuser %}
-                        <td>
-                            <p><a href="{% url 'adminapp:posts_detail' object.pk %}"
-                                  class="btn btn-outline-success col-sm-12 text-dark">Просмотр</a></p>
-                            <p><a href="#" class="btn btn-outline-info text-dark disabled   ">Опубликовать</a></p>
-                        </td>
-                    {% endif %}
-                </tr>
-                </tbody>
-            {% endfor %}
+            {% if user.is_superuser %}
+            <td>
+                <p><a href="{% url 'adminapp:posts_detail' object.pk %}"
+                      class="btn btn-outline-success col-sm-12 text-dark">Просмотр</a></p>
+                <p><a href="#" class="btn btn-outline-info text-dark disabled   ">Опубликовать</a></p>
+            </td>
+            {% endif %}
+        </tr>
+        </tbody>
+        {% endfor %}
         {% else %}
-            <h1>Нет постов для модерации</h1>
+        <h1>Нет постов для модерации</h1>
         {% endif %}
 
-        </table>
+    </table>
 
 
-        {#        {% for object in object_list %}#}
-        {#            <div class="container_box#}
+    {# {% for object in object_list %}#}
+    {#
+    <div class="container_box#}
         {#                {% if not object.is_active %}#}
         {#                    not_active#}
         {#                {% endif %}">#}
-        {#                <div>#}
-        {#                    Автор: {{ object.user }}<br>#}
-        {#                    Заголовок: {{ object.name }}<br>#}
-        {#                    Текст: {{ object.text|truncatechars:100 }}<br>#}
-        {#                    Дата создания: {{ object.created_at }}<br>#}
-        {#                    <a class="user_edit_button" href={% url 'adminapp:post_update' object.pk %}>#}
-        {#                        редактировать#}
-        {#                    </a>#}
-        {#                    <br>#}
-        {#                    <a class="user_edit_button" href={% url 'adminapp:post_delete' object.pk %}>#}
-        {#                        {% if object.is_active %}#}
-        {#                            удалить#}
-        {#                        {% else %}#}
-        {#                            восстановить#}
-        {#                        {% endif %}#}
-        {#                    </a>#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        {% endfor %}#}
+        {#
+        <div>#}
+            {# Автор: {{ object.user }}<br>#}
+            {# Заголовок: {{ object.name }}<br>#}
+            {# Текст: {{ object.text|truncatechars:100 }}<br>#}
+            {# Дата создания: {{ object.created_at }}<br>#}
+            {# <a class="user_edit_button" href={% url 'adminapp:post_update' object.pk %}>#}
+            {# редактировать#}
+            {#                    </a>#}
+            {# <br>#}
+            {# <a class="user_edit_button" href={% url 'adminapp:post_delete' object.pk %}>#}
+            {# {% if object.is_active %}#}
+            {# удалить#}
+            {# {% else %}#}
+            {# восстановить#}
+            {# {% endif %}#}
+            {#                    </a>#}
+            {#
+        </div>
+        #}
+        {#
     </div>
+    #}
+    {# {% endfor %}#}
+</div>
 
 {% endblock %}
 

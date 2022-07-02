@@ -37,7 +37,7 @@
             <h3>{{ post.name }}</h3>
         </div>
         <a href="#">
-            <img src="/media/{{ post.image }}" alt="" onerror="this.style.opacity='0'">
+            <img class="blog_img"src="/media/{{ post.image }}" alt="" onerror="this.style.opacity='0'">
         </a>
         <p class="card-text" style="text-align: justify;">{{ post.text|truncatechars:200|safe }}</p>
         <p><a href="{% url 'blogs:post_read' post.id %}">Читать...</a></p>

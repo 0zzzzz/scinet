@@ -18,25 +18,68 @@ body {
     min-height: 100%
 }
 
-.dws-menu li ul{
-    position: absolute;
-    min-width: 150px;
-    display: none;
+.content{
+    min-height: calc(100vh - 484px);
 }
 
-.dws-menu li > ul li{
-    background: white;
-    border: 1px solid #c7c8ca;
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-
-.dws-menu li:hover > ul{
-    display: block;
+nav a {
+  display: block;
+  text-decoration: none;
+  outline: none;
+  transition: .4s ease-in-out;
 }
-
-.dws-menu{
-    padding-top:5px;
-    position: relative;
-    z-index: 1;
+.topmenu {
+  backface-visibility: hidden;
+  background: rgba(255,255,255,.8);
+}
+.topmenu > li {
+  display: inline-block;
+  position: relative;
+}
+.topmenu > li > a {
+  font-family: 'Exo 2', sans-serif;
+  height: 70px;
+  line-height: 70px;
+  font-weight: bold;
+  color: #3F3F3F;
+  text-transform: uppercase;
+}
+.down:after {
+  content: "\f107";
+  margin-left: 8px;
+  font-family: FontAwesome;
+}
+.topmenu li a:hover { color: #000000; }
+.submenu {
+  background: white;
+  border: 2px solid #bfbfbf;
+  position: absolute;
+    border-radius: 5px;
+  left: 0;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 5;
+  width: 150px;
+  transform: perspective(600px) rotateX(-90deg);
+  transform-origin: 0% 0%;
+  transition: .6s ease-in-out;
+}
+.topmenu > li:hover .submenu{
+  visibility: visible;
+  opacity: 1;
+  transform: perspective(600px) rotateX(0deg);
+}
+.submenu li a {
+  color: #7f7f7f;
+  font-size: 11px;
+  line-height: 36px;
+  padding: 0 25px;
+  font-family: "Gill Sans", sans-serif;
 }
 
 /*html, body {*/
@@ -70,10 +113,6 @@ body {
 .main_menu {
     display: flex;
     padding-top: 24px;
-}
-
-.login_register {
-    padding-top: 22px;
 }
 
 .logo_name {
@@ -194,9 +233,17 @@ body {
 }
 
 .single_blog{
-    border: 2px solid #aeafd9;
+    border: 2px solid #bfbfbf;
     border-radius: 10px;
     padding: 10px;
+}
+
+/*.blog_img {*/
+/*    height: 10px;*/
+/*}*/
+
+.blog_meta {
+    margin: -20px 0px -5px 0px;
 }
 
 .hr{
@@ -288,6 +335,7 @@ a {
 .post_form {
     display: flex;
     flex-direction: column;
+    width: 80%;
 }
 
 .card-img-top {
@@ -342,7 +390,8 @@ ul.likes {
 
 .custom-search {
     width: 300px;
-    border-radius: 10px;
+    border-radius: 5px;
+    border: solid;
 }
 
 
@@ -380,5 +429,32 @@ ul.navigation {
 }
 
 .rounded-circle{
-    border-radius: 100px;
+    border-radius: 5px;
+}
+
+
+.burger_menu {
+    max-width: 15px;
+    margin-left: 5px;
+}
+
+.not_user{
+    font-weight: bold;
+}
+
+.edited_content{
+    display: flex;
+    justify-content: center;
+}
+
+.admin_block{
+    width: 90%;
+}
+
+.django-ckeditor-widget{
+    width: 100%
+}
+
+.date_message {
+    width: 1px;
 }

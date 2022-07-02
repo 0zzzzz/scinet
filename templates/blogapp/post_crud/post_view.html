@@ -23,26 +23,27 @@
                 {% endif %}
             {% endif %}
             <h1>{{ post.name }}</h1>
+            {% if user.id == post.user.id or user.is_moderator or user.is_superuser %}
+                <a href="{% url 'blogs:post_update' post.id %}"
+                   class="btn btn-outline-secondary me-2 col-4" style="padding-left: 0px;">
+                    <img src="{% static 'img/edit.png' %}" alt="add-file" width="35px" style="margin: 10px 10px 0;">
+                </a>
+                <a href="{% url 'blogs:post_delete' post.id %}"
+                   class="btn btn-outline-secondary me-2 col-4">
+                    {% if post.is_active %}
+                        <img src="{% static 'img/delete.png' %}" alt="add-file" width="35px" style="margin: 10px 0;">
+                    {% else %}
+                        <img src="{% static 'img/history.png' %}" alt="add-file" width="35px" style="margin: 10px 0;">
+                    {% endif %}
+                </a>
+            {% endif %}
         </div>
         <br>
         <p>{{ post.text|safe }}</p>
         <br>
         <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">
         <div>
-            {% if user.id == post.user.id or user.is_moderator or user.is_superuser %}
-                <a href="{% url 'blogs:post_update' post.id %}"
-                   class="btn btn-outline-secondary me-2 col-4" style="padding-left: 0px;">Редактировать</a>
 
-
-                <a href="{% url 'blogs:post_delete' post.id %}"
-                   class="btn btn-outline-secondary me-2 col-4">
-                    {% if post.is_active %}
-                        Скрыть
-                    {% else %}
-                        Восстановить
-                    {% endif %}
-                </a>
-            {% endif %}
         </div>
         {% if user.is_authenticated %}
             <ul class="likes">
@@ -63,6 +64,8 @@
                 <br>
                 <input type="submit" value="Опубликовать" class="auth_button btn-block btn-primary col-lg-12">
             </form>
+        {% else %}
+        <p class="not_user">Вы не вошли в аккаунт. Чтобы поставить лайк или прокомментировать пост, авторизуйтесь или пройдите регистрацию.</p>
         {% endif %}
         <div>
             <br>

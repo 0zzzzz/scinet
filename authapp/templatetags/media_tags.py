@@ -1,6 +1,8 @@
 from django.conf import settings
 from django import template
 
+from authapp.models import SNUser
+
 register = template.Library()
 
 
@@ -16,3 +18,11 @@ def index_empty(img_path):
     if not img_path:
         img_path = 'technical_img/default.jpg'
     return f'{img_path}'
+
+
+@register.simple_tag
+def get_companion(user, chat):
+    for u in chat.members.all():
+        if u != user:
+            return u
+    return None

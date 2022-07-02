@@ -1,0 +1,53 @@
+.user_profile{
+    background-color: ghostwhite;
+    width: 60%;
+    margin-top: 30px;
+}
+
+.user{
+    display: flex;
+}
+
+.user_profile_footer{
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.photo{
+    display: grid;
+    margin-top: 30px;
+    margin-left: 20px;
+}
+
+.user_avatar{
+    float: left; margin-right: 10px; margin-bottom: 10px;
+}
+
+.photo img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+}
+
+.user_info{
+    display: flex;
+}
+
+.bio-graph-info{
+    margin-left: 30px;
+}
+
+.row{
+    margin-left: 30px;
+    margin-right: 100px;
+}
+
+.user_data{
+    padding-right: 10px;
+}
+
+.edit_profile{
+    display: flex;
+    justify-content: center;
+}

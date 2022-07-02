@@ -221,8 +221,8 @@ class VotesView(View):
         )
 
 
-"""Функции для обработки просмотров"""
 def get_user_ip(request):
+    """Функции для обработки просмотров"""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[-1].strip()
@@ -231,10 +231,9 @@ def get_user_ip(request):
     return ip
 
 
-"""Уведомления"""
 @method_decorator(login_required, name='dispatch')
 class NotificationListView(ListView):
-    """Отображение всех уведомлений пользователя"""
+    """Уведомления. Отображение всех уведомлений пользователя"""
     model = Notifications
     template_name = 'authapp/user_auth/notifications.html'
 
@@ -269,8 +268,8 @@ def delete_all_notifications(request):
 
 
 
-"""Вспомогательные функции для уведомлений"""
 def is_ajax(request):
+    """Вспомогательные функции для уведомлений"""
     """Почему-то is_ajax не хотел работать, нашел такое вот решение"""
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 

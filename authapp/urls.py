@@ -18,6 +18,9 @@ urlpatterns = [
     path('subscribe/add/<int:pk>/', authapp.add_subscribe, name='subscribe_add'),
     path('subscribe/del/<int:pk>/', authapp.del_subscribe, name='subscribe_del'),
     path('comments/', authapp.SNCommentsDetailView.as_view(), name='user_comments'),
+    path('dialogs/', authapp.SNDialogsView.as_view(), name='user_dialogs'),
+    path('dialogs/create/<int:user_id>/', authapp.SNCreateDialogsView.as_view(), name='create_dialogs'),
+    path('dialogs/<int:chat_id>/', authapp.SNDialogView.as_view(), name='view_dialog'),
     # path('api/user_create/', authapp.SNUserCreateAPIView.as_view(), name='api_user_create'),
     # path('api/user_update/<int:pk>/', authapp.SNUserUpdateAPIView.as_view(), name='api_user_update'),
 ]

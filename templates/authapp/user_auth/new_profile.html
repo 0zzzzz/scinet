@@ -1,0 +1,95 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% load media_tags %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'new_style_profile.css' %}">
+<div class="container user_profile">
+    <div class="user">
+        <div class="photo">
+            <div class="user_avatar">
+                <img src="{{ user_profile.avatar | media_for_users}}">
+            </div>
+            {% if user.username == user_profile.username %}
+                <a href="{% url 'authapp:edit' %}" class="edit_profile">Редактировать профиль</a>
+            {% else %}
+                {% if user.is_authenticated %}
+                <a href="{% url 'authapp:create_dialogs' user_profile.id %}" class="edit_profile">Написать сообщение</a>
+                {% endif %}
+            {% endif %}
+
+        </div>
+        <div>
+            <h1 class="bio-graph-info">О {{ user_profile.username }}</h1>
+            <div class="user_info">
+                <div class="row">
+                    <div class="bio-row">
+                        <span class="user_data">Имя </span>
+                        {{ user_profile.first_name }}
+                    </div>
+                    <br>
+                    <div class="bio-row">
+                        <span class="user_data">Страна </span>
+                        Australia
+                    </div>
+                    <br>
+                    <div class="bio-row">
+                        <span class="user_data">Профессия </span>
+                        UI Designer
+                    </div>
+                    <br>
+                    <div class="bio-row">
+                        <span class="user_data">Создан</span>
+                    </div>
+                    <br>
+                    <div class="bio-row">
+                        <span class="user_data">Посты </span>
+                        {{ user_post_count }}
+                    </div>
+                </div>
+                <div>
+                    <div class="bio-row">
+                        <span class="user_data">Фамилия </span>
+                        {{ user_profile.last_name }}
+                    </div>
+                    <br>
+                    <div class="bio-row">
+                        <span class="user_data">Возраст </span>
+                        {{ user_profile.age }}
+                    </div>
+                    <br>
+                    <div class="bio-row">
+                        <span class="user_data">Email </span>
+                        {{ user_profile.email }}
+                    </div>
+                    <br>
+                    <div class="bio-row">
+                        <span class="user_data">Изменен</span>
+                    </div>
+                    <br>
+                    <div class="bio-row">
+                        <span class="user_data">Комментарии </span>
+                        {{ user_comments_count }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% if user.username == user_profile.username %}
+    <div class="user_profile_footer">
+        <a href="{% url 'authapp:section_subscribe' %}">
+            <img src="{% static 'img/newspaper.png' %}" alt="add-file" width="35px">
+            Моя лента</a>
+        <a href="{% url 'blogapp:post_create' %}">
+            <img src="{% static 'img/add-file.png' %}" alt="add-file" width="35px">Создать статью</a>
+        <a href="{% url 'authapp:posts_user_list' %}">
+            <img src="{% static 'img/social-media.png' %}" alt="add-file" width="35px">
+            Мои статьи</a>
+        <a href="{% url 'authapp:user_comments' %}">
+            <img src="{% static 'img/chat.png' %}" alt="add-file" width="35px">
+            Мои комментарии</a>
+    </div>
+     {% endif %}
+</div>
+{% endblock %}
