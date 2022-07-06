@@ -1,0 +1,11 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="container">
+        <p><h1>Активация выполнена! Теперь вы можете войти на сайт!</h1></p>
+        <a class="btn btn-primary" href="{% url 'auth:login' %}">Авторизация</a>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

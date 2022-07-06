@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from authapp import tasks
 from authapp.forms import SNUserLoginForm, SNUserRegisterForm, SNUserEditForm, SNUserProfileEditForm, MessageForm
 from authapp.models import SNUser, SNUserProfile, SNChat, SNMessage
 from blogapp.models import SNPosts, SNSections, SNSubscribe, Comments
@@ -32,13 +33,14 @@ class LoginView(View):
         username = request.POST['username']
         password = request.POST['password']
         user = auth.authenticate(username=username, password=password)
-        if user:
+        if user.is_active and not user.user_blocked:
             auth.login(request, user)
             return HttpResponseRedirect(reverse('index'))
         form = self.form_class()
         return render(request, self.template_name, context={'form': form,
                                                             'title': 'Логин',
-                                                            'error_text': 'Введён неправильный логин или пароль'})
+                                                            # 'error_text': 'Введён неправильный логин или пароль'})
+                                                            'error_text': 'Ваш аккуант заблокирован'})
 
 
 class LogoutView(View):
@@ -60,6 +62,24 @@ class RegisterView(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Регистрация'
         return context
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        if form.is_valid():
+            form.save()
+            email_user = f"{form.cleaned_data['email']}"
+            print(email_user)
+            user = SNUser.objects.filter(email=email_user).first()
+            activate_key = f"{user.activate_key}"
+            print(activate_key)
+            tasks.send_verify_email.delay(email_user, activate_key)
+            return HttpResponseRedirect(reverse('auth:login'))
+
+        context = {
+            'register_form': form,
+            'title': 'Регистрация пользователя',
+        }
+        return HttpResponseRedirect(reverse('auth:login'), context)
 
 
 class EditView(View):
@@ -209,6 +229,20 @@ class SNProfileDetailView(ListView):
         return render(request, self.template_name, context=context)
 
 
+def verify(request, email, key):
+    user = SNUser.objects.filter(email=email).first()
+    if user:
+        if user.activate_key == key and not user.is_activation_key_expired():
+            user.activate_user()
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+    context = {
+        'title': 'Активация',
+    }
+
+    return render(request, 'authapp/register_socifull.html', context)
+
+
 class SNDialogsView(View):
     template_name = 'messages/dialogs_view.html'
 
@@ -266,3 +300,4 @@ class SNDialogView(View):
             message.author = request.user
             message.save()
         return redirect(reverse('authapp:view_dialog', kwargs={'chat_id': chat_id}))
+    

@@ -9,10 +9,13 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from celery.schedules import crontab
+import adminapp.tasks
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -43,6 +46,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'django_filters',
     'ckeditor',
+    'django_celery_beat'
+
 ]
 
 MIDDLEWARE = [
@@ -53,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 AUTH_USER_MODEL = 'authapp.SNUser'
@@ -122,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -155,3 +161,39 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     )
 }
+
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_IGNORE_RESULT = False
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TRACK_STARTED = True
+CELERYD_LOG_FILE = os.path.join(
+    BASE_DIR, 'celery', 'logs')
+CELERYD_LOG_LEVEL = "INFO"
+
+CELERY_BEAT_SCHEDULE = {
+    "task_unlocked_users": {
+        "task": "adminapp.tasks.task_unlocked_users",
+        # "schedule": crontab(day_of_week="*/1"),
+        "schedule": crontab(),  # Выполнение раз в минуту для наглядности, позже удалить и раскомментировать выше
+    },
+    "send_email_report_new_users": {
+        "task": "adminapp.tasks.send_email_report_new_users",
+        "schedule": crontab(day_of_week="*/1"),
+    },
+    "send_email_report_new_posts": {
+        "task": "adminapp.tasks.send_email_report_new_posts",
+        "schedule": crontab(day_of_week="*/1"),
+    },
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/'
+
+DEFAULT_FROM_EMAIL = "noreply@email.com"
+ADMINS = [("admin", "admin.user@email.com"), ]
+
+DOMAIN_NAME = "https://www.scinet.com"

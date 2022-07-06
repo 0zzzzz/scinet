@@ -17,6 +17,7 @@ import json
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.contenttypes.models import ContentType
+from blogapp import tasks
 
 
 class SNPostDetailView(DetailView):
@@ -221,8 +222,10 @@ class VotesView(View):
         )
 
 
+"""Функции для обработки просмотров"""
+
+
 def get_user_ip(request):
-    """Функции для обработки просмотров"""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[-1].strip()
@@ -231,9 +234,12 @@ def get_user_ip(request):
     return ip
 
 
+"""Уведомления"""
+
+
 @method_decorator(login_required, name='dispatch')
 class NotificationListView(ListView):
-    """Уведомления. Отображение всех уведомлений пользователя"""
+    """Отображение всех уведомлений пользователя"""
     model = Notifications
     template_name = 'authapp/user_auth/notifications.html'
 
@@ -267,9 +273,10 @@ def delete_all_notifications(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+"""Вспомогательные функции для уведомлений"""
+
 
 def is_ajax(request):
-    """Вспомогательные функции для уведомлений"""
     """Почему-то is_ajax не хотел работать, нашел такое вот решение"""
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
@@ -373,6 +380,7 @@ def notify_like(likedislike):
 
 def notify_comment(comment):
     """Функция для создания уведомления по комментарию"""
+
     from_user = comment.user
     content_type = ContentType.objects.get_for_model(comment)
     comment_id = comment.id
@@ -381,7 +389,13 @@ def notify_comment(comment):
     notification = Notifications.create(content_type, comment_id, to_user, from_user)
     notification.save()
 
-    
+    # Блок кода для передачи данных в Celery
+    text_cel = f"{comment.text}"
+    from_user_cel = f"{comment.user}"
+    to_user_cel = f"{comment.post.user}"
+    tasks.new_comment_moderator_notification.delay(from_user_cel, text_cel, to_user_cel)
+
+
 class Favorites(ListView):
     """Показывает всё избранное пользователя"""
     model = SNFavorites
@@ -407,4 +421,3 @@ def change_favorites(request, pk):
     else:
         SNFavorites.objects.filter(Q(user=user) & Q(post=post)).delete()
     return HttpResponseRedirect(reverse('blogapp:favorites'))
-

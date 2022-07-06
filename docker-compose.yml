@@ -1,20 +1,41 @@
-version: '3.1'
+version: '3.9'
 
 services:
-  db:
-    image: postgres
-    volumes:
-      - ./db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+#  db:
+#    image: postgres
+#    volumes:
+#      - ./db:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_DB=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8078
+    build: ./
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code
+      - ./:/usr/src/app/
     ports:
-      - 8078:8078
+      - 8000:8000
+
+  redis:
+    image: redis
+    restart: always
+
+  celery:
+    restart: always
+    build:
+      context: ./
+    command: celery -A scinet worker -l info
+    volumes:
+      - ./:/usr/src/app/
     depends_on:
-      - db
+      - redis
+
+  celery-beat:
+    build: ./
+    command: celery -A scinet beat -l info
+    volumes:
+      - ./:/usr/src/app/
+    depends_on:
+      - redis

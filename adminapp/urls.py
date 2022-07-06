@@ -31,6 +31,10 @@ urlpatterns = [
     path('post/delete/<int:pk>/', adminapp.SNPostDeleteView.as_view(),
          name='post_delete'),
     path('post/modarated/<int:pk>', adminapp.post_moderated, name='moderated'),
+
+    path('locked_user/<int:pk>/', adminapp.locked, name='locked'),
+    path('unlocked_user/<int:pk>/', adminapp.unlocked, name='unlocked'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
