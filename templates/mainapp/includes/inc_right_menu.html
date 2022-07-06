@@ -1,4 +1,4 @@
-<div class="col-xl-4 col-md-4">
+<div class="col-xl-4 col-md-3">
     <div class="blog_right_side">
         <div class="section_title mb-33">
             <h3>Категории</h3>
@@ -9,8 +9,8 @@
                 <li class="list-group-item text-uppercase">
                     <a href="{% url 'adminapp:sections_all_posts' category.pk %}"
                        class="text-muted text-decoration-none">{{category.name }}</a></li>
-                <a href="{% url 'adminapp:sections_list' category.pk %}"
-                   class="text-muted text-decoration-none">{{category.name }}</a></li>
+{#                <a href="{% url 'adminapp:sections_list' category.pk %}"#}
+{#                   class="text-muted text-decoration-none">{{category.name }}</a></li>#}
 
                 {% endfor %}
             </ul>
