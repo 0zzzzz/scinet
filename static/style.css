@@ -458,3 +458,8 @@ ul.navigation {
 .date_message {
     width: 1px;
 }
+
+.upper {
+    display: flex;
+    justify-content: space-between;
+}
