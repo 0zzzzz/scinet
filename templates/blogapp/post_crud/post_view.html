@@ -38,10 +38,10 @@
                 </a>
             {% endif %}
         </div>
-        <br>
         <p>{{ post.text|safe }}</p>
-        <br>
-        <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">
+        {% if post.image %}
+            <img src="/media/{{ post.image }}" class="card-img-top post_img" alt="img" onerror="this.style.opacity='0'">
+        {% endif %}
         <div>
 
         </div>

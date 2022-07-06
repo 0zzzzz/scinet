@@ -233,7 +233,7 @@ nav a {
 }
 
 .single_blog{
-    border: 2px solid #bfbfbf;
+    /*border: 2px solid #bfbfbf;*/
     border-radius: 10px;
     padding: 10px;
 }
