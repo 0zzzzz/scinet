@@ -33,9 +33,12 @@ class SNPostsListView(ListView):
         section_pk = self.kwargs.get('pk')
         if section_pk is None:
             section_pk = 0
-        queryset = super().get_queryset().filter(is_moderated=True, is_active=True).order_by('-created_at')
+        # queryset = super().get_queryset().filter(is_moderated=True, is_active=True).order_by('-created_at')
+        # if section_pk != 0:
+        #     queryset = queryset.filter(section__pk=section_pk)
+        queryset = super().get_queryset().filter(is_active=True).order_by('-created_at')
         if section_pk != 0:
-            queryset = queryset.filter(section__pk=section_pk)
+            queryset = queryset.filter(is_moderated=True, is_active=True, section__pk=section_pk)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -46,6 +49,7 @@ class SNPostsListView(ListView):
         context['links_menu'] = get_links_menu()
         if len(category) > 0:
             context['category'] = category[0]
+        # context['posts'] = SNPosts.objects.all()
         context['categories'] = SNSections.objects.all()
         context['title'] = 'Главная'
         context['filter'] = PostsFilter(self.request.GET, queryset=self.get_queryset())
