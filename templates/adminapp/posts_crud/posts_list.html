@@ -52,7 +52,8 @@
             <td>
                 <p><a href="{% url 'adminapp:posts_detail' object.pk %}"
                       class="btn btn-outline-success col-sm-12 text-dark">Просмотр</a></p>
-                <p><a href="#" class="btn btn-outline-info text-dark disabled   ">Опубликовать</a></p>
+                <p><a href="{% url 'adminapp:moderated' object.pk %}" class="btn btn-outline-info text-dark">
+                    Опубликовать</a></p>
             </td>
             {% endif %}
         </tr>
