@@ -368,6 +368,8 @@ ul.likes {
 .notification_seen {
     background-color: #d0f5f5;
     animation: pulse 1s infinite;
+    border-radius: 5px;
+    padding: 0px 5px;
 }
 
 .notification_seen:hover {

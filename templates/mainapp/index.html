@@ -38,12 +38,16 @@
         <div class="row">
             <div class="col-xl-8 col-md-9">
                 <div class="section_title mb-33">
-                    {% if user.is_authenticated %}
-                    <h3>SciNet ждет твой новый пост</h3>
-                    <p><a class="btn btn-outline-secondary text-muted me-3 add" href="{% url 'blogs:post_create' %}">
-                        <img src="{% static 'img/add-file.png' %}" alt="add-file" width="35px">
-                    </a>
-                    </p>
+                    {% if category %}
+                        <h3>{{ category.name }}</h3>
+                    {% else %}
+                        {% if user.is_authenticated %}
+                            <h3>SciNet ждет твой новый пост</h3>
+                            <p><a class="btn btn-outline-secondary text-muted me-3 add" href="{% url 'blogs:post_create' %}">
+                                <img src="{% static 'img/add-file.png' %}" alt="add-file" width="35px">
+                            </a>
+                            </p>
+                        {% endif %}
                     {% endif %}
                 </div>
                 {% include 'mainapp/includes/inc_post_card_model.html' %}
