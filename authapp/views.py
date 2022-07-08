@@ -33,14 +33,15 @@ class LoginView(View):
         username = request.POST['username']
         password = request.POST['password']
         user = auth.authenticate(username=username, password=password)
-        if user.is_active and not user.user_blocked:
+        # if user.is_active and not user.user_blocked:
+        if user:
             auth.login(request, user)
             return HttpResponseRedirect(reverse('index'))
         form = self.form_class()
         return render(request, self.template_name, context={'form': form,
                                                             'title': 'Логин',
-                                                            # 'error_text': 'Введён неправильный логин или пароль'})
-                                                            'error_text': 'Ваш аккуант заблокирован'})
+                                                            'error_text': 'Введён неправильный логин или пароль'})
+                                                            # 'error_text': 'Ваш аккуант заблокирован'})
 
 
 class LogoutView(View):
