@@ -1,3 +1,7 @@
+from datetime import datetime, timedelta
+
+import pytz
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
@@ -12,6 +16,41 @@ class SNUser(AbstractUser):
     patronymic = models.CharField(max_length=150, verbose_name='Отчество', **NULLABLE)
     age = models.PositiveSmallIntegerField(verbose_name='Возраст', **NULLABLE)
     is_moderator = models.BooleanField(default=False, verbose_name='Модератор')
+    is_superuser = models.BooleanField(default=False, verbose_name='Администратор')
+
+    user_blocked = models.BooleanField(default=False, verbose_name='Заблокирован')
+    date_blocked_start = models.DateTimeField(blank=True, null=True, verbose_name='Дата блокировки')
+    date_blocked_end = models.DateTimeField(blank=True, null=True, verbose_name='Дата разблокировки')
+
+    activate_key = models.CharField(max_length=128, verbose_name='Ключ активации', blank=True, null=True)
+    activate_key_expired = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+        ordering = ('id',)
+
+    def is_activation_key_expired(self):
+        if datetime.now(pytz.timezone(settings.TIME_ZONE)) > self.activate_key_expired + timedelta(hours=48):
+            return True
+        return False
+
+    def activate_user(self):
+        self.is_active = True
+        self.activate_key = None
+        self.activate_key_expired = None
+        self.save()
+
+    def locked_user(self):
+        self.user_blocked = True
+        self.date_blocked_start = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        self.date_blocked_end = self.date_blocked_start + timedelta(days=20)
+        self.save()
+
+    def unlocked_user(self):
+        self.user_blocked = False
+        self.date_blocked_end = None
+        self.save()
 
 
 class SNUserProfile(models.Model):

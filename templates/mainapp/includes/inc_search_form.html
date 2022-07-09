@@ -1,7 +1,10 @@
-<form class="d-flex" role="search" method="GET">
-    {% for field in filter.form %}
-    <span class="form-control me-2">{{ field }}</span>
-    {% endfor %}
-    <button class="btn btn-outline-secondary" type="submit">Найти</button>
-
-</form>
+<div class="get_serch">
+    <div class="thread-header">
+        <form class="d-flex" role="search" method="GET">
+            {% for field in filter.form %}
+                {{ field }}
+            {% endfor %}
+            <button class="btn" type="submit"><i class="ti-search"></i></button>
+        </form>
+    </div>
+</div>

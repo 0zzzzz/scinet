@@ -1,0 +1,11 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="container pt-5">
+        <h1>Пользователь успешно разблокирован</h1>
+        <a class="btn btn-primary" href="{% url 'adminapp:users_list' %}">Список пользователей</a>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

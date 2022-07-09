@@ -233,3 +233,17 @@ class SNSectionDeleteView(AccessMixin, DeleteMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Удаление поста'
         return context
+
+
+def locked(request, pk):
+    user = SNUser.objects.filter(pk=pk).first()
+    if user:
+        user.locked_user()
+    return render(request, 'adminapp/users_crud/user_blocked.html')
+
+
+def unlocked(request, pk):
+    user = SNUser.objects.filter(pk=pk).first()
+    if user:
+        user.unlocked_user()
+    return render(request, 'adminapp/users_crud/user_unblocked.html')

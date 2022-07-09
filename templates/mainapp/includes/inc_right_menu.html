@@ -6,18 +6,12 @@
         <div class="border best-blogs">
             <ul class="list-group list-group-flush">
                 {% for category in categories %}
-                    <li class="list-group-item text-uppercase">
-                        <a href="{% url 'adminapp:sections_all_posts' category.pk %}"
-                           class="text-muted text-decoration-none">{{ category.name }}</a>
-                    </li>
+                <li class="list-group-item text-uppercase">
+                    <a href="{% url 'mainapp:posts' category.pk %}"
+                       class="text-muted text-decoration-none">{{category.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>
-{#        <div class="add_here text-center">#}
-{#            <a href="#">#}
-{#                <img src="img/most_recent/googleAdd.jpg" alt="">#}
-{#            </a>#}
-{#        </div>#}
         <div class="section_title mb-33">
             <h3>Теги</h3>
         </div>

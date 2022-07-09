@@ -19,7 +19,7 @@
             <tbody>
             {% for item in user_comments %}
                 <tr>
-                    <td>{{ item.post }}</td>
+                    <td><a href="{% url 'blogapp:post_read' item.post.id %}">{{ item.post }}</a></td>
                     <td>{{ item.text }}</td>
                     <td><a href="{% url 'blogapp:comment_update' item.post.id item.id %}">
                         <img src="{% static 'img/edit.png' %}" alt="edit_comment" width="25px">

@@ -33,6 +33,9 @@ class SNPostsListView(ListView):
         section_pk = self.kwargs.get('pk')
         if section_pk is None:
             section_pk = 0
+        # queryset = super().get_queryset().filter(is_moderated=True, is_active=True).order_by('-created_at')
+        # if section_pk != 0:
+        #     queryset = queryset.filter(section__pk=section_pk)
         queryset = super().get_queryset().filter(is_active=True).order_by('-created_at')
         if section_pk != 0:
             queryset = queryset.filter(is_moderated=True, is_active=True, section__pk=section_pk)
@@ -41,22 +44,13 @@ class SNPostsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         section_pk = self.kwargs.get('pk')
-        context['posts'] = SNPosts.objects.filter(is_moderated=True, is_active=True).order_by('-created_at')
+        category = SNSections.objects.filter(pk=section_pk)
+
         context['links_menu'] = get_links_menu()
-        context['category'] = SNSections.objects.filter(pk=section_pk)
+        if len(category) > 0:
+            context['category'] = category[0]
+        # context['posts'] = SNPosts.objects.all()
         context['categories'] = SNSections.objects.all()
         context['title'] = 'Главная'
         context['filter'] = PostsFilter(self.request.GET, queryset=self.get_queryset())
-        return context
-
-
-class SNPostDetailView(DetailView):
-    """Отображение_поста"""
-    model = SNPosts
-    # Необходимо добавить шаблон для постов
-    template_name = 'mainapp/post.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['links_menu'] = get_links_menu()
         return context

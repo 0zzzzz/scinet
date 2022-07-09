@@ -1,4 +1,9 @@
+import hashlib
+from datetime import datetime
+
+import pytz
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from authapp.models import SNUser, SNUserProfile, SNMessage
 
@@ -7,7 +12,6 @@ class SNUserLoginForm(AuthenticationForm):
     class Meta:
         model = SNUser
         fields = ('username', 'password')
-
 
     def __init__(self, *args, **kwargs):
         super(SNUserLoginForm, self).__init__(*args, **kwargs)
@@ -29,7 +33,11 @@ class SNUserRegisterForm(UserCreationForm):
 
     def save(self, *args, **kwargs):
         user = super().save(*args, **kwargs)
-        user.is_active = True
+        user.is_active = False
+
+        user.activate_key = hashlib.sha1(user.email.encode('utf-8')).hexdigest()
+        user.activate_key_expired = datetime.now(pytz.timezone(settings.TIME_ZONE))
+
         user.save()
         return user
 

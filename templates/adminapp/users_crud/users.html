@@ -27,12 +27,17 @@
                         </h4>
                     {% else %}
                         <h4>
-                            пользователь
+                            пользователь {{ object.username }}
                         </h4>
                     {% endif %}
-                    <br>
-                    {{ object.username }}<br>
-                    <br>
+{#                    <br>#}
+{#                    {{ object.username }}<br>#}
+{#                    <br>#}
+                    {% if object.user_blocked %}
+                        <p>Статус блокировки: <span class="text-danger font-weight-bold">Заблокирован</span></p>
+                    {% else %}
+                        <p class="fw-bold">Статус блокировки: <span class="text-primary font-weight-bold">Не заблокирован</span></p>
+                    {% endif %}
                     <a class="user_edit_button" href={% url 'adminapp:user_update' object.pk %}>
                         редактировать
                     </a>
@@ -44,6 +49,14 @@
                             восстановить
                         {% endif %}
                     </a>
+                    <div class="d-flex">
+                        <a class="user_delete_button text-danger" href={% url 'adminapp:locked' object.pk %}>
+                            Заблокировать
+                        </a><br>
+                        <a class="user_delete_button text-primary" href={% url 'adminapp:unlocked' object.pk %}>
+                            Разблокировать
+                        </a>
+                    </div>
                 </div>
             </div>
         {% endfor %}

@@ -12,11 +12,15 @@
 
         {% csrf_token %}
         <table class="register_table">
+{#            {{ register_form }}#}
             {{ form }}
         </table>
         <br>
-        <input class="auth_button enter" type="submit" value="Зарегестрироваться">
+        <input class="auth_button enter" type="submit" value="Зарегистрироваться">
         <br>
     </form>
 </div>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

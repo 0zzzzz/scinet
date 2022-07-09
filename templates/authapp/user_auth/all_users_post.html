@@ -24,7 +24,7 @@
 
             <tr>
                 <td class="td1">{{ item.pk }}</td>
-                <td>{{ item.name }}</td>
+                <td><a href="{% url 'blogapp:post_read' item.id %}">{{ item.name }}</a></td>
                 <td>{{ item.created_at|date:"Y-m-d H:i:s" }}</td>
                 <td>{{ item.updated_at|date:"Y-m-d H:i:s" }}</td>
                 {% if item.is_active == True %}
